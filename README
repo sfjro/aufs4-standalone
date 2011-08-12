@@ -1,0 +1,20 @@
+AUFS module
+http://aufs.sf.net
+Junjiro. R. Okajima
+
+In this GIT repository, there are several GIT branches named "aufsX.Y".
+Here "X.Y" is the version number and it corresponds to the aufs version
+(aufs3 and later). Run git-checkout to get the source files of aufs
+source files.
+
+For instance, when you are using aufs3.0 (which means your system is
+linux-3.0), you should run
+	$ git checkout origin/aufs3.0
+in this direcotry and you can get the source files for aufs3.0.
+To compile and install them, read the README file after "git checkout".
+
+Enjoy!
+
+# Local variables: ;
+# mode: text;
+# End: ;
