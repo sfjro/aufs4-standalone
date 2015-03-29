@@ -1,5 +1,5 @@
 config AUFS_FS
-	bool "Aufs (Advanced multi layered unification filesystem) support"
+	tristate "Aufs (Advanced multi layered unification filesystem) support"
 	help
 	Aufs is a stackable unification filesystem such as Unionfs,
 	which unifies several directories and provides a merged single
@@ -71,7 +71,7 @@ endchoice
 
 config AUFS_EXPORT
 	bool "NFS-exportable aufs"
-	depends on EXPORTFS = y
+	depends on EXPORTFS
 	help
 	If you want to export your mounted aufs via NFS, then enable this
 	option. There are several requirements for this configuration.
