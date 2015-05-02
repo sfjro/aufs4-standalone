@@ -24,7 +24,7 @@
 #include "aufs.h"
 
 /* todo: unnecessary to support mmap_sem since kernel-space? */
-ssize_t xino_fread(au_readf_t func, struct file *file, void *kbuf, size_t size,
+ssize_t xino_fread(vfs_readf_t func, struct file *file, void *kbuf, size_t size,
 		   loff_t *pos)
 {
 	ssize_t err;
@@ -53,7 +53,7 @@ ssize_t xino_fread(au_readf_t func, struct file *file, void *kbuf, size_t size,
 
 /* ---------------------------------------------------------------------- */
 
-static ssize_t do_xino_fwrite(au_writef_t func, struct file *file, void *kbuf,
+static ssize_t do_xino_fwrite(vfs_writef_t func, struct file *file, void *kbuf,
 			      size_t size, loff_t *pos)
 {
 	ssize_t err;
@@ -82,7 +82,7 @@ static ssize_t do_xino_fwrite(au_writef_t func, struct file *file, void *kbuf,
 
 struct do_xino_fwrite_args {
 	ssize_t *errp;
-	au_writef_t func;
+	vfs_writef_t func;
 	struct file *file;
 	void *buf;
 	size_t size;
@@ -95,8 +95,8 @@ static void call_do_xino_fwrite(void *args)
 	*a->errp = do_xino_fwrite(a->func, a->file, a->buf, a->size, a->pos);
 }
 
-ssize_t xino_fwrite(au_writef_t func, struct file *file, void *buf, size_t size,
-		    loff_t *pos)
+ssize_t xino_fwrite(vfs_writef_t func, struct file *file, void *buf,
+		    size_t size, loff_t *pos)
 {
 	ssize_t err;
 
@@ -144,7 +144,7 @@ struct file *au_xino_create2(struct file *base_file, struct file *copy_src)
 
 	base = base_file->f_path.dentry;
 	parent = base->d_parent; /* dir inode is locked */
-	dir = parent->d_inode;
+	dir = d_inode(parent);
 	IMustLock(dir);
 
 	file = ERR_PTR(-EINVAL);
@@ -222,11 +222,11 @@ static void au_xino_lock_dir(struct super_block *sb, struct file *xino,
 	if (brid >= 0)
 		bindex = au_br_index(sb, brid);
 	if (bindex >= 0) {
-		ldir->hdir = au_hi(sb->s_root->d_inode, bindex);
+		ldir->hdir = au_hi(d_inode(sb->s_root), bindex);
 		au_hn_imtx_lock_nested(ldir->hdir, AuLsc_I_PARENT);
 	} else {
 		ldir->parent = dget_parent(xino->f_path.dentry);
-		ldir->mtx = &ldir->parent->d_inode->i_mutex;
+		ldir->mtx = &d_inode(ldir->parent)->i_mutex;
 		mutex_lock_nested(ldir->mtx, AuLsc_I_PARENT);
 	}
 }
@@ -337,7 +337,7 @@ static void xino_do_trunc(void *_args)
 
 	err = 0;
 	sb = args->sb;
-	dir = sb->s_root->d_inode;
+	dir = d_inode(sb->s_root);
 	br = args->br;
 
 	si_noflush_write_lock(sb);
@@ -414,7 +414,7 @@ out:
 
 /* ---------------------------------------------------------------------- */
 
-static int au_xino_do_write(au_writef_t write, struct file *file,
+static int au_xino_do_write(vfs_writef_t write, struct file *file,
 			    ino_t h_ino, ino_t ino)
 {
 	loff_t pos;
@@ -574,7 +574,7 @@ void au_xino_delete_inode(struct inode *inode, const int unlinked)
 	struct au_hinode *hi;
 	struct inode *h_inode;
 	struct au_branch *br;
-	au_writef_t xwrite;
+	vfs_writef_t xwrite;
 
 	sb = inode->i_sb;
 	mnt_flags = au_mntflags(sb);
@@ -748,7 +748,7 @@ struct file *au_xino_create(struct super_block *sb, char *fname, int silent)
 
 	/* keep file count */
 	h_parent = dget_parent(file->f_path.dentry);
-	h_dir = h_parent->d_inode;
+	h_dir = d_inode(h_parent);
 	mutex_lock_nested(&h_dir->i_mutex, AuLsc_I_PARENT);
 	/* mnt_want_write() is unnecessary here */
 	/* no delegation since it is just created */
@@ -872,7 +872,7 @@ static int do_xib_restore(struct super_block *sb, struct file *file, void *page)
 	unsigned long pindex;
 	loff_t pos, pend;
 	struct au_sbinfo *sbinfo;
-	au_readf_t func;
+	vfs_readf_t func;
 	ino_t *ino;
 	unsigned long *p;
 
@@ -990,31 +990,6 @@ out:
 /*
  * xino mount option handlers
  */
-static au_readf_t find_readf(struct file *h_file)
-{
-	const struct file_operations *fop = h_file->f_op;
-
-	if (fop->read)
-		return fop->read;
-	if (fop->aio_read)
-		return do_sync_read;
-	if (fop->read_iter)
-		return new_sync_read;
-	return ERR_PTR(-ENOSYS);
-}
-
-static au_writef_t find_writef(struct file *h_file)
-{
-	const struct file_operations *fop = h_file->f_op;
-
-	if (fop->write)
-		return fop->write;
-	if (fop->aio_write)
-		return do_sync_write;
-	if (fop->write_iter)
-		return new_sync_write;
-	return ERR_PTR(-ENOSYS);
-}
 
 /* xino bitmap */
 static void xino_clear_xib(struct super_block *sb)
@@ -1050,8 +1025,8 @@ static int au_xino_set_xib(struct super_block *sb, struct file *base)
 	if (sbinfo->si_xib)
 		fput(sbinfo->si_xib);
 	sbinfo->si_xib = file;
-	sbinfo->si_xread = find_readf(file);
-	sbinfo->si_xwrite = find_writef(file);
+	sbinfo->si_xread = vfs_readf(file);
+	sbinfo->si_xwrite = vfs_writef(file);
 
 	err = -ENOMEM;
 	if (!sbinfo->si_xib_buf)
@@ -1112,7 +1087,7 @@ static int au_xino_set_br(struct super_block *sb, struct file *base)
 	} *fpair, *p;
 	struct au_branch *br;
 	struct inode *inode;
-	au_writef_t writef;
+	vfs_writef_t writef;
 
 	SiMustWriteLock(sb);
 
@@ -1122,7 +1097,7 @@ static int au_xino_set_br(struct super_block *sb, struct file *base)
 	if (unlikely(!fpair))
 		goto out;
 
-	inode = sb->s_root->d_inode;
+	inode = d_inode(sb->s_root);
 	ino = AUFS_ROOT_INO;
 	writef = au_sbi(sb)->si_xwrite;
 	for (bindex = 0, p = fpair; bindex <= bend; bindex++, p++) {
@@ -1212,7 +1187,7 @@ int au_xino_set(struct super_block *sb, struct au_opt_xino *xino, int remount)
 	}
 
 	au_opt_set(sbinfo->si_mntflags, XINO);
-	dir = parent->d_inode;
+	dir = d_inode(parent);
 	mutex_lock_nested(&dir->i_mutex, AuLsc_I_PARENT);
 	/* mnt_want_write() is unnecessary here */
 	err = au_xino_set_xib(sb, xino->file);

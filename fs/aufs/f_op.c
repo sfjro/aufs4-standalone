@@ -148,7 +148,7 @@ static ssize_t aufs_read(struct file *file, char __user *buf, size_t count,
 	/* todo: necessary? */
 	/* file->f_ra = h_file->f_ra; */
 	/* update without lock, I don't think it a problem */
-	fsstack_copy_attr_atime(dentry->d_inode, file_inode(h_file));
+	fsstack_copy_attr_atime(d_inode(dentry), file_inode(h_file));
 	fput(h_file);
 
 out:
@@ -193,7 +193,7 @@ static ssize_t aufs_write(struct file *file, const char __user *ubuf,
 
 	dentry = file->f_path.dentry;
 	sb = dentry->d_sb;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	au_mtx_and_read_lock(inode);
 
 	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
@@ -239,8 +239,6 @@ static ssize_t au_do_iter(struct file *h_file, int rw, struct kiocb *kio,
 	ssize_t err;
 	struct file *file;
 	ssize_t (*iter)(struct kiocb *, struct iov_iter *);
-	ssize_t (*aio)(struct kiocb *, const struct iovec *, unsigned long,
-		       loff_t);
 
 	err = security_file_permission(h_file, rw);
 	if (unlikely(err))
@@ -248,24 +246,16 @@ static ssize_t au_do_iter(struct file *h_file, int rw, struct kiocb *kio,
 
 	err = -ENOSYS;
 	iter = NULL;
-	aio = NULL;
-	if (rw == MAY_READ) {
+	if (rw == MAY_READ)
 		iter = h_file->f_op->read_iter;
-		aio = h_file->f_op->aio_read;
-	} else if (rw == MAY_WRITE) {
+	else if (rw == MAY_WRITE)
 		iter = h_file->f_op->write_iter;
-		aio = h_file->f_op->aio_write;
-	}
 
 	file = kio->ki_filp;
 	kio->ki_filp = h_file;
 	if (iter) {
 		lockdep_off();
 		err = iter(kio, iov_iter);
-		lockdep_on();
-	} else if (aio) {
-		lockdep_off();
-		err = aio(kio, iov_iter->iov, iov_iter->nr_segs, kio->ki_pos);
 		lockdep_on();
 	} else
 		/* currently there is no such fs */
@@ -300,7 +290,7 @@ static ssize_t aufs_read_iter(struct kiocb *kio, struct iov_iter *iov_iter)
 	/* todo: necessary? */
 	/* file->f_ra = h_file->f_ra; */
 	/* update without lock, I don't think it a problem */
-	fsstack_copy_attr_atime(dentry->d_inode, file_inode(h_file));
+	fsstack_copy_attr_atime(d_inode(dentry), file_inode(h_file));
 	fput(h_file);
 
 out:
@@ -322,7 +312,7 @@ static ssize_t aufs_write_iter(struct kiocb *kio, struct iov_iter *iov_iter)
 	file = kio->ki_filp;
 	dentry = file->f_path.dentry;
 	sb = dentry->d_sb;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	au_mtx_and_read_lock(inode);
 
 	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
@@ -395,7 +385,7 @@ static ssize_t aufs_splice_read(struct file *file, loff_t *ppos,
 	/* todo: necessasry? */
 	/* file->f_ra = h_file->f_ra; */
 	/* update without lock, I don't think it a problem */
-	fsstack_copy_attr_atime(dentry->d_inode, file_inode(h_file));
+	fsstack_copy_attr_atime(d_inode(dentry), file_inode(h_file));
 	fput(h_file);
 
 out:
@@ -418,7 +408,7 @@ aufs_splice_write(struct pipe_inode_info *pipe, struct file *file, loff_t *ppos,
 
 	dentry = file->f_path.dentry;
 	sb = dentry->d_sb;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	au_mtx_and_read_lock(inode);
 
 	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
@@ -470,7 +460,7 @@ static long aufs_fallocate(struct file *file, int mode, loff_t offset,
 
 	dentry = file->f_path.dentry;
 	sb = dentry->d_sb;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	au_mtx_and_read_lock(inode);
 
 	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
@@ -648,7 +638,7 @@ static int aufs_fsync_nondir(struct file *file, loff_t start, loff_t end,
 	struct super_block *sb;
 
 	dentry = file->f_path.dentry;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	sb = dentry->d_sb;
 	mutex_lock(&inode->i_mutex);
 	err = si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLM);
@@ -695,7 +685,7 @@ static int aufs_aio_fsync_nondir(struct kiocb *kio, int datasync)
 
 	file = kio->ki_filp;
 	dentry = file->f_path.dentry;
-	inode = dentry->d_inode;
+	inode = d_inode(dentry);
 	au_mtx_and_read_lock(inode);
 
 	err = 0; /* -EBADF; */ /* posix? */
