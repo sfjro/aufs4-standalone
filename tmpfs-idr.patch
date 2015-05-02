@@ -19,7 +19,7 @@ index 50777b5..f9c6b3d 100644
  	kuid_t uid;		    /* Mount uid for root directory */
  	kgid_t gid;		    /* Mount gid for root directory */
 diff --git a/mm/shmem.c b/mm/shmem.c
-index cf2d0ca..1098b9c 100644
+index de98137..df0b86f 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
 @@ -110,9 +110,13 @@ static unsigned long shmem_default_max_blocks(void)
@@ -222,7 +222,7 @@ index cf2d0ca..1098b9c 100644
  static const struct address_space_operations shmem_aops = {
  	.writepage	= shmem_writepage,
  	.set_page_dirty	= __set_page_dirty_no_writeback,
-@@ -3238,6 +3261,7 @@ int __init shmem_init(void)
+@@ -3236,6 +3259,7 @@ int __init shmem_init(void)
  		printk(KERN_ERR "Could not kern_mount tmpfs\n");
  		goto out1;
  	}
