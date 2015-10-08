@@ -1,7 +1,7 @@
 aufs4.x-rcN loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 11d812d..f3a1749 100644
+index 291ec9e..1b8190d 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
 @@ -417,7 +417,7 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
