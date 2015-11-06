@@ -193,11 +193,11 @@ index a3a64a3..1a97f57 100644
  		if (file->f_mapping != h_file->f_mapping) {
  			file->f_mapping = h_file->f_mapping;
 diff --git a/fs/aufs/loop.c b/fs/aufs/loop.c
-index a93c36e..c2c2e7a 100644
+index f324758..4555e7b 100644
 --- a/fs/aufs/loop.c
 +++ b/fs/aufs/loop.c
-@@ -130,3 +130,19 @@ void au_loopback_fin(void)
- 	symbol_put(loop_backing_file);
+@@ -131,3 +131,19 @@ void au_loopback_fin(void)
+ 		symbol_put(loop_backing_file);
  	kfree(au_warn_loopback_array);
  }
 +
@@ -242,10 +242,10 @@ index 6d9864d..3322557 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index 6383944..4b106e3 100644
+index 0657803..9289565 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
-@@ -809,7 +809,10 @@ static const struct super_operations aufs_sop = {
+@@ -832,7 +832,10 @@ static const struct super_operations aufs_sop = {
  	.statfs		= aufs_statfs,
  	.put_super	= aufs_put_super,
  	.sync_fs	= aufs_sync_fs,
