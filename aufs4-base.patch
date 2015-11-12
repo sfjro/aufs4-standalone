@@ -1,10 +1,10 @@
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 747c653..53ecc33 100644
+index 7af7f4a..5c0074f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -1985,6 +1985,19 @@ F:	include/linux/audit.h
+@@ -2011,6 +2011,19 @@ F:	include/linux/audit.h
  F:	include/uapi/linux/audit.h
  F:	kernel/audit*
  
@@ -25,10 +25,10 @@ index 747c653..53ecc33 100644
  M:	Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>
  W:	http://miguelojeda.es/auxdisplay.htm
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 674f800a..291ec9e 100644
+index 423f4ca..abfdd2b 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -560,6 +560,24 @@ static inline int is_loop_device(struct file *file)
+@@ -706,6 +706,24 @@ static inline int is_loop_device(struct file *file)
  	return i && S_ISBLK(i->i_mode) && MAJOR(i->i_rdev) == LOOP_MAJOR;
  }
  
@@ -100,7 +100,7 @@ index 819ef3f..fd0414e 100644
  {
  	mm_segment_t old_fs;
 diff --git a/fs/splice.c b/fs/splice.c
-index 5fc1e50..5f8385a 100644
+index 801c21c..218d188 100644
 --- a/fs/splice.c
 +++ b/fs/splice.c
 @@ -1102,8 +1102,8 @@ EXPORT_SYMBOL(generic_splice_sendpage);
@@ -140,10 +140,10 @@ index f87d308..9a290b3 100644
  static inline void fput_light(struct file *file, int fput_needed)
  {
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 72d8a84..fabd9d7a 100644
+index 9a1cb8c..b020f93 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
-@@ -1687,6 +1687,12 @@ ssize_t rw_copy_check_uvector(int type, const struct iovec __user * uvector,
+@@ -1674,6 +1674,12 @@ ssize_t rw_copy_check_uvector(int type, const struct iovec __user * uvector,
  			      struct iovec *fast_pointer,
  			      struct iovec **ret_pointer);
  
