@@ -1,10 +1,10 @@
 aufs4.x-rcN standalone patch
 
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 63b22d7..e597961 100644
+index 318c329..72d3cc8 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1272,6 +1272,7 @@ rename_retry:
+@@ -1261,6 +1261,7 @@ rename_retry:
  	seq = 1;
  	goto again;
  }
