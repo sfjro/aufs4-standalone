@@ -1,7 +1,7 @@
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index d026b19..80bf6f2 100644
+index d10ef06..e3bef76 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -29,7 +29,7 @@ extern int lock_stat;
@@ -13,12 +13,12 @@ index d026b19..80bf6f2 100644
  
  /*
   * NR_LOCKDEP_CACHING_CLASSES ... Number of classes
-@@ -203,7 +203,7 @@ struct lock_chain {
+@@ -205,7 +205,7 @@ struct lock_chain {
  	u64				chain_key;
  };
  
 -#define MAX_LOCKDEP_KEYS_BITS		13
-+#define MAX_LOCKDEP_KEYS_BITS		(13 + 4)
++#define MAX_LOCKDEP_KEYS_BITS		(13 + 3)
  /*
   * Subtract one because we offset hlock->class_idx by 1 in order
   * to make 0 mean no class. This avoids overflowing the class_idx
