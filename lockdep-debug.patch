@@ -1,7 +1,7 @@
 aufs4.5 lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 4dca42f..0b7003f 100644
+index 4dca42f..5f6c3a26 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -29,7 +29,7 @@ extern int lock_stat;
@@ -18,7 +18,7 @@ index 4dca42f..0b7003f 100644
  };
  
 -#define MAX_LOCKDEP_KEYS_BITS		13
-+#define MAX_LOCKDEP_KEYS_BITS		(13 + 4)
++#define MAX_LOCKDEP_KEYS_BITS		(13 + 3)
  /*
   * Subtract one because we offset hlock->class_idx by 1 in order
   * to make 0 mean no class. This avoids overflowing the class_idx
