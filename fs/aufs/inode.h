@@ -111,7 +111,6 @@ struct au_pin {
 void au_pin_hdir_unlock(struct au_pin *p);
 int au_pin_hdir_lock(struct au_pin *p);
 int au_pin_hdir_relock(struct au_pin *p);
-void au_pin_hdir_set_owner(struct au_pin *p, struct task_struct *task);
 void au_pin_hdir_acquire_nest(struct au_pin *p);
 void au_pin_hdir_release(struct au_pin *p);
 
@@ -306,10 +305,10 @@ AuStubVoid(au_plink_half_refresh, struct super_block *sb, aufs_bindex_t br_id);
 int au_cpup_xattr(struct dentry *h_dst, struct dentry *h_src, int ignore_flags,
 		  unsigned int verbose);
 ssize_t aufs_listxattr(struct dentry *dentry, char *list, size_t size);
-ssize_t aufs_getxattr(struct dentry *dentry, const char *name, void *value,
-		      size_t size);
-int aufs_setxattr(struct dentry *dentry, const char *name, const void *value,
-		  size_t size, int flags);
+ssize_t aufs_getxattr(struct dentry *dentry, struct inode *inode,
+		      const char *name, void *value, size_t size);
+int aufs_setxattr(struct dentry *dentry, struct inode *inode, const char *name,
+		  const void *value, size_t size, int flags);
 int aufs_removexattr(struct dentry *dentry, const char *name);
 
 /* void au_xattr_init(struct super_block *sb); */
@@ -349,7 +348,8 @@ struct au_srxattr {
 		} acl_set;
 	} u;
 };
-ssize_t au_srxattr(struct dentry *dentry, struct au_srxattr *arg);
+ssize_t au_srxattr(struct dentry *dentry, struct inode *inode,
+		   struct au_srxattr *arg);
 #endif
 
 /* ---------------------------------------------------------------------- */
@@ -478,6 +478,11 @@ static inline struct au_hinode *au_hinode(struct au_iinfo *iinfo,
 					  aufs_bindex_t bindex)
 {
 	return iinfo->ii_hinode + bindex;
+}
+
+static inline int au_is_bad_inode(struct inode *inode)
+{
+	return !!(is_bad_inode(inode) || !au_hinode(au_ii(inode), 0));
 }
 
 static inline aufs_bindex_t au_ii_br_id(struct inode *inode,
