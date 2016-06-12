@@ -1,7 +1,7 @@
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index d10ef06..e3bef76 100644
+index eabe013..3fc8245 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -29,7 +29,7 @@ extern int lock_stat;
