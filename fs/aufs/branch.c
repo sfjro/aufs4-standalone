@@ -313,7 +313,7 @@ static int au_br_init_wh(struct super_block *sb, struct au_branch *br,
 	bindex = au_br_index(sb, br->br_id);
 	if (0 <= bindex) {
 		hdir = au_hi(d_inode(sb->s_root), bindex);
-		au_hn_imtx_lock_nested(hdir, AuLsc_I_PARENT);
+		au_hn_inode_lock_nested(hdir, AuLsc_I_PARENT);
 	} else {
 		h_dentry = au_br_dentry(br);
 		h_inode = d_inode(h_dentry);
@@ -327,7 +327,7 @@ static int au_br_init_wh(struct super_block *sb, struct au_branch *br,
 		wbr_wh_write_unlock(wbr);
 	}
 	if (hdir)
-		au_hn_imtx_unlock(hdir);
+		au_hn_inode_unlock(hdir);
 	else
 		inode_unlock(h_inode);
 	vfsub_mnt_drop_write(au_br_mnt(br));
@@ -494,6 +494,7 @@ int au_br_add(struct super_block *sb, struct au_opt_add *add, int remount)
 	root = sb->s_root;
 	root_inode = d_inode(root);
 	IMustLock(root_inode);
+	IiMustWriteLock(root_inode);
 	err = test_add(sb, add, remount);
 	if (unlikely(err < 0))
 		goto out;

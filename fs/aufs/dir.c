@@ -140,14 +140,14 @@ static void au_do_dir_ts(void *arg)
 	if (err)
 		goto out_unlock;
 	hdir = au_hi(dir, btop);
-	au_hn_imtx_lock_nested(hdir, AuLsc_I_PARENT);
+	au_hn_inode_lock_nested(hdir, AuLsc_I_PARENT);
 	h_dir = au_h_iptr(dir, btop);
 	if (h_dir->i_nlink
 	    && timespec_compare(&h_dir->i_mtime, &dt.dt_mtime) < 0) {
 		dt.dt_h_path = h_path;
 		au_dtime_revert(&dt);
 	}
-	au_hn_imtx_unlock(hdir);
+	au_hn_inode_unlock(hdir);
 	vfsub_mnt_drop_write(h_path.mnt);
 	au_cpup_attr_timesizes(dir);
 
@@ -466,7 +466,7 @@ static int aufs_fsync_dir(struct file *file, loff_t start, loff_t end,
 
 /* ---------------------------------------------------------------------- */
 
-static int aufs_iterate(struct file *file, struct dir_context *ctx)
+static int aufs_iterate_shared(struct file *file, struct dir_context *ctx)
 {
 	int err;
 	struct dentry *dentry;
@@ -744,7 +744,7 @@ const struct file_operations aufs_dir_fop = {
 	.owner		= THIS_MODULE,
 	.llseek		= default_llseek,
 	.read		= generic_read_dir,
-	.iterate	= aufs_iterate,
+	.iterate_shared	= aufs_iterate_shared,
 	.unlocked_ioctl	= aufs_ioctl_dir,
 #ifdef CONFIG_COMPAT
 	.compat_ioctl	= aufs_compat_ioctl_dir,
