@@ -23,7 +23,6 @@
 #include <linux/nsproxy.h>
 #include <linux/security.h>
 #include <linux/splice.h>
-#include "../fs/mount.h"
 #include "aufs.h"
 
 #ifdef CONFIG_AUFS_BR_FUSE
