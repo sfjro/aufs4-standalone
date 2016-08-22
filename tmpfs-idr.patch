@@ -19,7 +19,7 @@ index ff078e7..1edb519 100644
  	umode_t mode;		    /* Mount mode for root directory */
  	unsigned char huge;	    /* Whether to try for hugepages */
 diff --git a/mm/shmem.c b/mm/shmem.c
-index 7f7748a..db4977c 100644
+index fd8b2b5..d4d2323 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
 @@ -104,9 +104,13 @@ static unsigned long shmem_default_max_blocks(void)
