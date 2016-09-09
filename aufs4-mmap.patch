@@ -1,10 +1,10 @@
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 54e2702..1b33870 100644
+index ac0df4d..42255e5 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
-@@ -1943,7 +1943,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
+@@ -1938,7 +1938,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
  	down_read(&mm->mmap_sem);
  	vma = find_exact_vma(mm, vm_start, vm_end);
  	if (vma && vma->vm_file) {
@@ -71,7 +71,7 @@ index faacb0c..17b43be 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 08ed53e..6e1694c 100644
+index ef815b9..a772481 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1278,6 +1278,28 @@ static inline int fixup_user_fault(struct task_struct *tsk,
@@ -124,7 +124,7 @@ index 903200f..55fc528 100644
  
  #ifndef CONFIG_MMU
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 52e725d..a17d2a9 100644
+index beb3172..ad4cfa8 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -477,7 +477,7 @@ static int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
