@@ -238,7 +238,8 @@ int aufs_rmdir(struct inode *dir, struct dentry *dentry);
 /* i_op_ren.c */
 int au_wbr(struct dentry *dentry, aufs_bindex_t btgt);
 int aufs_rename(struct inode *src_dir, struct dentry *src_dentry,
-		struct inode *dir, struct dentry *dentry);
+		struct inode *dir, struct dentry *dentry,
+		unsigned int rename_flags);
 
 /* iinfo.c */
 struct inode *au_h_iptr(struct inode *inode, aufs_bindex_t bindex);
@@ -311,17 +312,11 @@ AuStubVoid(au_plink_half_refresh, struct super_block *sb, aufs_bindex_t br_id);
 int au_cpup_xattr(struct dentry *h_dst, struct dentry *h_src, int ignore_flags,
 		  unsigned int verbose);
 ssize_t aufs_listxattr(struct dentry *dentry, char *list, size_t size);
-ssize_t aufs_getxattr(struct dentry *dentry, struct inode *inode,
-		      const char *name, void *value, size_t size);
-int aufs_setxattr(struct dentry *dentry, struct inode *inode, const char *name,
-		  const void *value, size_t size, int flags);
-int aufs_removexattr(struct dentry *dentry, const char *name);
-
-/* void au_xattr_init(struct super_block *sb); */
+void au_xattr_init(struct super_block *sb);
 #else
 AuStubInt0(au_cpup_xattr, struct dentry *h_dst, struct dentry *h_src,
 	   int ignore_flags, unsigned int verbose);
-/* AuStubVoid(au_xattr_init, struct super_block *sb); */
+AuStubVoid(au_xattr_init, struct super_block *sb);
 #endif
 
 #ifdef CONFIG_FS_POSIX_ACL
