@@ -297,7 +297,7 @@ index 03c1652..f88c84b 100644
  int devcgroup_inode_mknod(int mode, dev_t dev)
  {
 diff --git a/security/security.c b/security/security.c
-index 3644b03..593879b 100644
+index 3644b034..593879b 100644
 --- a/security/security.c
 +++ b/security/security.c
 @@ -433,6 +433,7 @@ int security_path_rmdir(struct path *dir, struct dentry *dentry)
