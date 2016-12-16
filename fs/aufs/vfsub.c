@@ -23,7 +23,9 @@
 #include <linux/nsproxy.h>
 #include <linux/security.h>
 #include <linux/splice.h>
+#ifdef CONFIG_AUFS_BR_FUSE
 #include "../fs/mount.h"
+#endif
 #include "aufs.h"
 
 #ifdef CONFIG_AUFS_BR_FUSE
@@ -383,7 +385,7 @@ out:
 
 int vfsub_rename(struct inode *src_dir, struct dentry *src_dentry,
 		 struct inode *dir, struct path *path,
-		 struct inode **delegated_inode)
+		 struct inode **delegated_inode, unsigned int flags)
 {
 	int err;
 	struct path tmp = {
@@ -404,7 +406,7 @@ int vfsub_rename(struct inode *src_dir, struct dentry *src_dentry,
 
 	lockdep_off();
 	err = vfs_rename(src_dir, src_dentry, dir, path->dentry,
-			 delegated_inode, /*flags*/0);
+			 delegated_inode, flags);
 	lockdep_on();
 	if (!err) {
 		int did;
