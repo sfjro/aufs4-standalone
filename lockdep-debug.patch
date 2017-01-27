@@ -1,10 +1,10 @@
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index c1458fe..3686fbe 100644
+index 1e327bb..0345cbf 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
-@@ -16,7 +16,7 @@
+@@ -16,7 +16,7 @@ struct lockdep_map;
  extern int prove_locking;
  extern int lock_stat;
  
