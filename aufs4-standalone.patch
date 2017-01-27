@@ -248,7 +248,7 @@ diff --git a/fs/xattr.c b/fs/xattr.c
 index 2d13b4e..41c2bcd 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
-@@ -296,6 +296,7 @@ int __vfs_setxattr_noperm(struct dentry *dentry, const char *name,
+@@ -296,6 +296,7 @@ vfs_getxattr_alloc(struct dentry *dentry, const char *name, char **xattr_value,
  	*xattr_value = value;
  	return error;
  }
