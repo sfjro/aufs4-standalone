@@ -1,7 +1,7 @@
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 8e7e61b..d3a114b 100644
+index 87c9a9a..a0196f0 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
 @@ -1958,7 +1958,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
@@ -71,7 +71,7 @@ index 3717562..6a328f1 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index fe6b403..36543f7 100644
+index b84615b..3978a35 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1257,6 +1257,28 @@ static inline int fixup_user_fault(struct task_struct *tsk,
@@ -150,10 +150,10 @@ index 295bd7a..14fa1c8 100644
  obj-y += init-mm.o
  
 diff --git a/mm/filemap.c b/mm/filemap.c
-index 82f26cd..3564f1f 100644
+index b772a33..1c11f45 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2366,7 +2366,7 @@ int filemap_page_mkwrite(struct vm_area_struct *vma, struct vm_fault *vmf)
+@@ -2392,7 +2392,7 @@ int filemap_page_mkwrite(struct vm_area_struct *vma, struct vm_fault *vmf)
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);
