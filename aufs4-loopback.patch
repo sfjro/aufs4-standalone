@@ -242,7 +242,7 @@ index 48bf070..66afec7 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index d1fc8b0..deab0e1 100644
+index 15d4e19..b34386b 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
 @@ -837,7 +837,10 @@ static const struct super_operations aufs_sop = {
@@ -258,7 +258,7 @@ index d1fc8b0..deab0e1 100644
  
  /* ---------------------------------------------------------------------- */
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index fc80663..0c4c6fa 100644
+index dcd7e327..fce4eab 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1814,6 +1814,10 @@ struct super_operations {
