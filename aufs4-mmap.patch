@@ -318,10 +318,10 @@ index 95daf81..5086a29 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..b323b8a
+index 0000000..c1c8518
 --- /dev/null
 +++ b/mm/prfile.c
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,85 @@
 +/*
 + * Mainly for aufs which mmap(2) diffrent file and wants to print different path
 + * in /proc/PID/maps.
@@ -329,7 +329,7 @@ index 0000000..b323b8a
 + *
 + * See Documentation/filesystems/aufs/design/06mmap.txt
 + *
-+ * Copyright (c) 2014 Junjro R. Okajima
++ * Copyright (c) 2014-2017 Junjro R. Okajima
 + * Copyright (c) 2014 Ian Campbell
 + */
 +
@@ -343,8 +343,7 @@ index 0000000..b323b8a
 +{
 +#ifdef PRFILE_TRACE
 +	if (pr)
-+		pr_info("%s:%d: %s, %s\n", func, line, func2,
-+			f ? (char *)f->f_path.dentry->d_name.name : "(null)");
++		pr_info("%s:%d: %s, %pD2\n", func, line, func2, f);
 +#endif
 +}
 +
