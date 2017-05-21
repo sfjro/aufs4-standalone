@@ -32,7 +32,7 @@ static void au_hfsn_free_mark(struct fsnotify_mark *mark)
 	struct au_hnotify *hn = container_of(mark, struct au_hnotify,
 					     hn_mark);
 	/* AuDbg("here\n"); */
-	au_cache_dfree_hnotify(hn);
+	au_cache_free_hnotify(hn);
 	smp_mb__before_atomic();
 	if (atomic64_dec_and_test(&au_hfsn_ifree))
 		wake_up(&au_hfsn_wq);
@@ -54,15 +54,15 @@ static int au_hfsn_alloc(struct au_hinode *hinode)
 	AuDebugOn(!br->br_hfsn);
 
 	mark = &hn->hn_mark;
-	fsnotify_init_mark(mark, au_hfsn_free_mark);
+	fsnotify_init_mark(mark, br->br_hfsn->hfsn_group);
 	mark->mask = AuHfsnMask;
 	/*
 	 * by udba rename or rmdir, aufs assign a new inode to the known
 	 * h_inode, so specify 1 to allow dups.
 	 */
 	lockdep_off();
-	err = fsnotify_add_mark(mark, br->br_hfsn->hfsn_group, hinode->hi_inode,
-				 /*mnt*/NULL, /*allow_dups*/1);
+	err = fsnotify_add_mark(mark, hinode->hi_inode, /*mnt*/NULL,
+				/*allow_dups*/1);
 	lockdep_on();
 
 	return err;
@@ -156,7 +156,7 @@ static void au_hfsn_free_group(struct fsnotify_group *group)
 	struct au_br_hfsnotify *hfsn = group->private;
 
 	/* AuDbg("here\n"); */
-	au_delayed_kfree(hfsn);
+	kfree(hfsn);
 }
 
 static int au_hfsn_handle_event(struct fsnotify_group *group,
@@ -164,7 +164,8 @@ static int au_hfsn_handle_event(struct fsnotify_group *group,
 				struct fsnotify_mark *inode_mark,
 				struct fsnotify_mark *vfsmount_mark,
 				u32 mask, const void *data, int data_type,
-				const unsigned char *file_name, u32 cookie)
+				const unsigned char *file_name, u32 cookie,
+				struct fsnotify_iter_info *iter_info)
 {
 	int err;
 	struct au_hnotify *hnotify;
@@ -203,7 +204,8 @@ out:
 
 static struct fsnotify_ops au_hfsn_ops = {
 	.handle_event		= au_hfsn_handle_event,
-	.free_group_priv	= au_hfsn_free_group
+	.free_group_priv	= au_hfsn_free_group,
+	.free_mark		= au_hfsn_free_mark
 };
 
 /* ---------------------------------------------------------------------- */
@@ -250,7 +252,7 @@ static int au_hfsn_init_br(struct au_branch *br, int perm)
 	goto out; /* success */
 
 out_hfsn:
-	au_delayed_kfree(hfsn);
+	kfree(hfsn);
 out:
 	return err;
 }
