@@ -318,13 +318,13 @@ index 95daf81..5086a29 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..c1c8518
+index 0000000..1ef053b
 --- /dev/null
 +++ b/mm/prfile.c
 @@ -0,0 +1,85 @@
 +/*
-+ * Mainly for aufs which mmap(2) diffrent file and wants to print different path
-+ * in /proc/PID/maps.
++ * Mainly for aufs which mmap(2) different file and wants to print different
++ * path in /proc/PID/maps.
 + * Call these functions via macros defined in linux/mm.h.
 + *
 + * See Documentation/filesystems/aufs/design/06mmap.txt
