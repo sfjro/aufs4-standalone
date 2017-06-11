@@ -1,7 +1,7 @@
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 45f6bf6..155799c 100644
+index f1e1927..7b5af0c 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
 @@ -1943,7 +1943,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
@@ -71,7 +71,7 @@ index 23266694..58e59b6 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7cb17c6..2a7a0ea 100644
+index b892e95..76c879f 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1306,6 +1306,28 @@ static inline int fixup_user_fault(struct task_struct *tsk,
@@ -124,7 +124,7 @@ index 45cdb27..1a40012 100644
  
  #ifndef CONFIG_MMU
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 06d759a..c19bcc7 100644
+index e53770d..cdf7516 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -665,7 +665,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
@@ -305,13 +305,13 @@ index fc184f5..637ea81 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..c1c8518
+index 0000000..1ef053b
 --- /dev/null
 +++ b/mm/prfile.c
 @@ -0,0 +1,85 @@
 +/*
-+ * Mainly for aufs which mmap(2) diffrent file and wants to print different path
-+ * in /proc/PID/maps.
++ * Mainly for aufs which mmap(2) different file and wants to print different
++ * path in /proc/PID/maps.
 + * Call these functions via macros defined in linux/mm.h.
 + *
 + * See Documentation/filesystems/aufs/design/06mmap.txt
