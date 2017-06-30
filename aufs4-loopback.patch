@@ -1,7 +1,7 @@
 aufs4.x-rcN loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index c075624..1b96887 100644
+index 6b8a6a4c..a80416e 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
 @@ -547,7 +547,7 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
@@ -36,14 +36,10 @@ index c075624..1b96887 100644
  
  	/* freeze queue and wait for completion of scheduled requests */
  	blk_mq_freeze_queue(lo->lo_queue);
-@@ -608,7 +611,16 @@ static int loop_switch(struct loop_device *lo, struct file *file)
-  */
- static int loop_flush(struct loop_device *lo)
- {
--	return loop_switch(lo, NULL);
-+	return loop_switch(lo, NULL, NULL);
-+}
-+
+@@ -614,6 +617,15 @@ static int loop_flush(struct loop_device *lo)
+ 	return loop_switch(lo, NULL);
+ }
+ 
 +static struct file *loop_real_file(struct file *file)
 +{
 +	struct file *f = NULL;
@@ -51,10 +47,12 @@ index c075624..1b96887 100644
 +	if (file->f_path.dentry->d_sb->s_op->real_loop)
 +		f = file->f_path.dentry->d_sb->s_op->real_loop(file);
 +	return f;
- }
- 
++}
++
  static void loop_reread_partitions(struct loop_device *lo,
-@@ -645,6 +657,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+ 				   struct block_device *bdev)
+ {
+@@ -648,6 +660,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  			  unsigned int arg)
  {
  	struct file	*file, *old_file;
@@ -62,7 +60,7 @@ index c075624..1b96887 100644
  	struct inode	*inode;
  	int		error;
  
-@@ -661,9 +674,16 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -664,9 +677,16 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  	file = fget(arg);
  	if (!file)
  		goto out;
@@ -79,7 +77,7 @@ index c075624..1b96887 100644
  
  	error = -EINVAL;
  
-@@ -675,17 +695,21 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -678,17 +698,21 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  		goto out_putf;
  
  	/* and ... switch */
@@ -102,7 +100,7 @@ index c075624..1b96887 100644
   out:
  	return error;
  }
-@@ -872,7 +896,7 @@ static int loop_prepare_queue(struct loop_device *lo)
+@@ -875,7 +899,7 @@ static int loop_prepare_queue(struct loop_device *lo)
  static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  		       struct block_device *bdev, unsigned int arg)
  {
@@ -111,7 +109,7 @@ index c075624..1b96887 100644
  	struct inode	*inode;
  	struct address_space *mapping;
  	unsigned lo_blocksize;
-@@ -887,6 +911,12 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -890,6 +914,12 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  	file = fget(arg);
  	if (!file)
  		goto out;
@@ -124,7 +122,7 @@ index c075624..1b96887 100644
  
  	error = -EBUSY;
  	if (lo->lo_state != Lo_unbound)
-@@ -939,6 +969,7 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -942,6 +972,7 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  	lo->lo_device = bdev;
  	lo->lo_flags = lo_flags;
  	lo->lo_backing_file = file;
@@ -132,7 +130,7 @@ index c075624..1b96887 100644
  	lo->transfer = NULL;
  	lo->ioctl = NULL;
  	lo->lo_sizelimit = 0;
-@@ -971,6 +1002,8 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -974,6 +1005,8 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  
   out_putf:
  	fput(file);
@@ -141,7 +139,7 @@ index c075624..1b96887 100644
   out:
  	/* This is safe: open() is still holding a reference. */
  	module_put(THIS_MODULE);
-@@ -1017,6 +1050,7 @@ loop_init_xfer(struct loop_device *lo, struct loop_func_table *xfer,
+@@ -1020,6 +1053,7 @@ loop_init_xfer(struct loop_device *lo, struct loop_func_table *xfer,
  static int loop_clr_fd(struct loop_device *lo)
  {
  	struct file *filp = lo->lo_backing_file;
@@ -149,7 +147,7 @@ index c075624..1b96887 100644
  	gfp_t gfp = lo->old_gfp_mask;
  	struct block_device *bdev = lo->lo_device;
  
-@@ -1048,6 +1082,7 @@ static int loop_clr_fd(struct loop_device *lo)
+@@ -1051,6 +1085,7 @@ static int loop_clr_fd(struct loop_device *lo)
  	spin_lock_irq(&lo->lo_lock);
  	lo->lo_state = Lo_rundown;
  	lo->lo_backing_file = NULL;
@@ -157,7 +155,7 @@ index c075624..1b96887 100644
  	spin_unlock_irq(&lo->lo_lock);
  
  	loop_release_xfer(lo);
-@@ -1092,6 +1127,8 @@ static int loop_clr_fd(struct loop_device *lo)
+@@ -1095,6 +1130,8 @@ static int loop_clr_fd(struct loop_device *lo)
  	 * bd_mutex which is usually taken before lo_ctl_mutex.
  	 */
  	fput(filp);

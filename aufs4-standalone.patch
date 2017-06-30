@@ -1,7 +1,7 @@
 aufs4.x-rcN standalone patch
 
 diff --git a/fs/dcache.c b/fs/dcache.c
-index c98964d..8c7d606 100644
+index 3458af5..5fd25bb 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
 @@ -1272,6 +1272,7 @@ void d_walk(struct dentry *parent, void *data,
@@ -12,7 +12,7 @@ index c98964d..8c7d606 100644
  
  struct check_mount {
  	struct vfsmount *mnt;
-@@ -2864,6 +2865,7 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
+@@ -2862,6 +2863,7 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
  
  	write_sequnlock(&rename_lock);
  }
@@ -21,7 +21,7 @@ index c98964d..8c7d606 100644
  /**
   * d_ancestor - search for an ancestor
 diff --git a/fs/exec.c b/fs/exec.c
-index 72934df..e5de28f 100644
+index 9041990..31f14c6 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -109,6 +109,7 @@ bool path_noexec(const struct path *path)
@@ -93,7 +93,7 @@ index 69cbe9c..764566d 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 8bd3e4d..d728531 100644
+index 5a44384..cc6f6fb 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -462,6 +462,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
@@ -205,7 +205,7 @@ index cd0c5be..491442a 100644
  static int do_dentry_open(struct file *f,
  			  struct inode *inode,
 diff --git a/fs/read_write.c b/fs/read_write.c
-index 355c2a2..589a5d54 100644
+index 05033f7..ce062e8 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -523,6 +523,7 @@ vfs_readf_t vfs_readf(struct file *file)
