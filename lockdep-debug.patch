@@ -1,0 +1,47 @@
+aufs4.12 lockdep patch
+
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index fffe49f..ba75d06 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -16,7 +16,7 @@ struct lockdep_map;
+ extern int prove_locking;
+ extern int lock_stat;
+ 
+-#define MAX_LOCKDEP_SUBCLASSES		8UL
++#define MAX_LOCKDEP_SUBCLASSES		(8UL + 4)
+ 
+ #ifdef CONFIG_LOCKDEP
+ 
+@@ -205,7 +205,7 @@ struct lock_chain {
+ 	u64				chain_key;
+ };
+ 
+-#define MAX_LOCKDEP_KEYS_BITS		13
++#define MAX_LOCKDEP_KEYS_BITS		(13 + 3)
+ /*
+  * Subtract one because we offset hlock->class_idx by 1 in order
+  * to make 0 mean no class. This avoids overflowing the class_idx
+diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
+index c08fbd2..b868e7b 100644
+--- a/kernel/locking/lockdep_internals.h
++++ b/kernel/locking/lockdep_internals.h
+@@ -66,15 +66,15 @@ enum {
+ #define MAX_LOCKDEP_CHAINS_BITS	15
+ #define MAX_STACK_TRACE_ENTRIES	262144UL
+ #else
+-#define MAX_LOCKDEP_ENTRIES	32768UL
++#define MAX_LOCKDEP_ENTRIES	(32768UL << 5)
+ 
+-#define MAX_LOCKDEP_CHAINS_BITS	16
++#define MAX_LOCKDEP_CHAINS_BITS	(16 + 5)
+ 
+ /*
+  * Stack-trace: tightly packed array of stack backtrace
+  * addresses. Protected by the hash_lock.
+  */
+-#define MAX_STACK_TRACE_ENTRIES	524288UL
++#define MAX_STACK_TRACE_ENTRIES	(524288UL << 5)
+ #endif
+ 
+ #define MAX_LOCKDEP_CHAINS	(1UL << MAX_LOCKDEP_CHAINS_BITS)
