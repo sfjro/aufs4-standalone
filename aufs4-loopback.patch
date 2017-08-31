@@ -1,7 +1,7 @@
 aufs4.12 loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 6b8a6a4c..a80416e 100644
+index 6b8a6a4c..5bbcb6d 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
 @@ -547,7 +547,7 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
@@ -36,10 +36,14 @@ index 6b8a6a4c..a80416e 100644
  
  	/* freeze queue and wait for completion of scheduled requests */
  	blk_mq_freeze_queue(lo->lo_queue);
-@@ -614,6 +617,15 @@ static int loop_flush(struct loop_device *lo)
- 	return loop_switch(lo, NULL);
- }
- 
+@@ -611,7 +614,16 @@ static int loop_flush(struct loop_device *lo)
+ 	/* loop not yet configured, no running thread, nothing to flush */
+ 	if (lo->lo_state != Lo_bound)
+ 		return 0;
+-	return loop_switch(lo, NULL);
++	return loop_switch(lo, NULL, NULL);
++}
++
 +static struct file *loop_real_file(struct file *file)
 +{
 +	struct file *f = NULL;
@@ -47,11 +51,9 @@ index 6b8a6a4c..a80416e 100644
 +	if (file->f_path.dentry->d_sb->s_op->real_loop)
 +		f = file->f_path.dentry->d_sb->s_op->real_loop(file);
 +	return f;
-+}
-+
+ }
+ 
  static void loop_reread_partitions(struct loop_device *lo,
- 				   struct block_device *bdev)
- {
 @@ -648,6 +660,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  			  unsigned int arg)
  {
