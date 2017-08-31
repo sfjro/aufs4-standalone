@@ -124,7 +124,7 @@ index 3cadee0..d0142c1 100644
  
  #ifndef CONFIG_MMU
 diff --git a/kernel/fork.c b/kernel/fork.c
-index e075b77..af14572 100644
+index cbbea27..f0fd8a1 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -663,7 +663,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
@@ -150,10 +150,10 @@ index 411bd24..e7de927 100644
  obj-y += init-mm.o
  
 diff --git a/mm/filemap.c b/mm/filemap.c
-index a497024..9389040 100644
+index 0b41c8c..c5262ff 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2541,7 +2541,7 @@ int filemap_page_mkwrite(struct vm_fault *vmf)
+@@ -2543,7 +2543,7 @@ int filemap_page_mkwrite(struct vm_fault *vmf)
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);

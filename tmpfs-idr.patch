@@ -19,7 +19,7 @@ index a7d6bd2..9e93fbc 100644
  	umode_t mode;		    /* Mount mode for root directory */
  	unsigned char huge;	    /* Whether to try for hugepages */
 diff --git a/mm/shmem.c b/mm/shmem.c
-index 6540e59..2c26c05 100644
+index fbcb3c9..859e4c2 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
 @@ -110,9 +110,13 @@ static unsigned long shmem_default_max_blocks(void)
@@ -221,4 +221,4 @@ index 6540e59..2c26c05 100644
 +	shmem_no_idr(shm_mnt->mnt_sb);
  
  #ifdef CONFIG_TRANSPARENT_HUGE_PAGECACHE
- 	if (has_transparent_hugepage() && shmem_huge < SHMEM_HUGE_DENY)
+ 	if (has_transparent_hugepage() && shmem_huge > SHMEM_HUGE_DENY)
