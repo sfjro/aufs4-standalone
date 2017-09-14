@@ -180,7 +180,7 @@ index fb2237c..c3888c5 100644
  	unsigned	lo_blocksize;
  	void		*key_data; 
 diff --git a/fs/aufs/f_op.c b/fs/aufs/f_op.c
-index 870717e..ea7fee0 100644
+index 8aff060..e853272 100644
 --- a/fs/aufs/f_op.c
 +++ b/fs/aufs/f_op.c
 @@ -357,7 +357,7 @@ static ssize_t aufs_read_iter(struct kiocb *kio, struct iov_iter *iov_iter)
@@ -242,10 +242,10 @@ index e2df495..36e5052 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index 5455fb1..8b9df60 100644
+index 3c300125..128d790 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
-@@ -837,7 +837,10 @@ static const struct super_operations aufs_sop = {
+@@ -838,7 +838,10 @@ static const struct super_operations aufs_sop = {
  	.statfs		= aufs_statfs,
  	.put_super	= aufs_put_super,
  	.sync_fs	= aufs_sync_fs,
