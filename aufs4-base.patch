@@ -101,6 +101,23 @@ index db59147..69cbe9c 100644
  {
  	int (*update_time)(struct inode *, struct timespec *, int);
  
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 5a44384..affb54f 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -785,6 +785,12 @@ static inline int check_mnt(struct mount *mnt)
+ 	return mnt->mnt_ns == current->nsproxy->mnt_ns;
+ }
+ 
++/* for aufs, CONFIG_AUFS_BR_FUSE */
++int is_current_mnt_ns(struct vfsmount *mnt)
++{
++	return check_mnt(real_mount(mnt));
++}
++
+ /*
+  * vfsmount lock must be held for write
+  */
 diff --git a/fs/read_write.c b/fs/read_write.c
 index 19d4d88..05033f7 100644
 --- a/fs/read_write.c
@@ -236,6 +253,25 @@ index 803e5a9..22d2910 100644
  extern int sync_filesystem(struct super_block *);
  extern const struct file_operations def_blk_fops;
  extern const struct file_operations def_chr_fops;
+diff --git a/include/linux/mnt_namespace.h b/include/linux/mnt_namespace.h
+index 12b2ab5..8b810d1 100644
+--- a/include/linux/mnt_namespace.h
++++ b/include/linux/mnt_namespace.h
+@@ -5,11 +5,14 @@
+ struct mnt_namespace;
+ struct fs_struct;
+ struct user_namespace;
++struct vfsmount;
+ 
+ extern struct mnt_namespace *copy_mnt_ns(unsigned long, struct mnt_namespace *,
+ 		struct user_namespace *, struct fs_struct *);
+ extern void put_mnt_ns(struct mnt_namespace *ns);
+ 
++extern int is_current_mnt_ns(struct vfsmount *mnt);
++
+ extern const struct file_operations proc_mounts_operations;
+ extern const struct file_operations proc_mountinfo_operations;
+ extern const struct file_operations proc_mountstats_operations;
 diff --git a/include/linux/splice.h b/include/linux/splice.h
 index db42746..12f3a5a 100644
 --- a/include/linux/splice.h

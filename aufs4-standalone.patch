@@ -93,7 +93,7 @@ index 69cbe9c..764566d 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 5a44384..cc6f6fb 100644
+index affb54f..ed9b143 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -462,6 +462,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
@@ -104,7 +104,15 @@ index 5a44384..cc6f6fb 100644
  
  /**
   * mnt_drop_write - give up write access to a mount
-@@ -1881,6 +1882,7 @@ int iterate_mounts(int (*f)(struct vfsmount *, void *), void *arg,
+@@ -790,6 +791,7 @@ int is_current_mnt_ns(struct vfsmount *mnt)
+ {
+ 	return check_mnt(real_mount(mnt));
+ }
++EXPORT_SYMBOL_GPL(is_current_mnt_ns);
+ 
+ /*
+  * vfsmount lock must be held for write
+@@ -1887,6 +1889,7 @@ int iterate_mounts(int (*f)(struct vfsmount *, void *), void *arg,
  	}
  	return 0;
  }
