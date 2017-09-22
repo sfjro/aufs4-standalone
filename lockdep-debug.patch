@@ -1,7 +1,7 @@
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index fffe49f..ba75d06 100644
+index bfa8e0b..c68e565 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -16,7 +16,7 @@ struct lockdep_map;
@@ -11,9 +11,9 @@ index fffe49f..ba75d06 100644
 -#define MAX_LOCKDEP_SUBCLASSES		8UL
 +#define MAX_LOCKDEP_SUBCLASSES		(8UL + 4)
  
- #ifdef CONFIG_LOCKDEP
+ #include <linux/types.h>
  
-@@ -205,7 +205,7 @@ struct lock_chain {
+@@ -213,7 +213,7 @@ struct lock_chain {
  	u64				chain_key;
  };
  
@@ -23,7 +23,7 @@ index fffe49f..ba75d06 100644
   * Subtract one because we offset hlock->class_idx by 1 in order
   * to make 0 mean no class. This avoids overflowing the class_idx
 diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
-index c08fbd2..b868e7b 100644
+index 1da4669..2a02956 100644
 --- a/kernel/locking/lockdep_internals.h
 +++ b/kernel/locking/lockdep_internals.h
 @@ -66,15 +66,15 @@ enum {
