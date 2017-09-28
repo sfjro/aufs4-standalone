@@ -33,7 +33,7 @@ index ac34d97..f42757e 100644
  #ifdef CONFIG_USELIB
  /*
 diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 2f5dc26..66a3043 100644
+index f51c2cf..58bf222 100644
 --- a/fs/fcntl.c
 +++ b/fs/fcntl.c
 @@ -84,6 +84,7 @@ int setfl(int fd, struct file * filp, unsigned long arg)
@@ -302,7 +302,7 @@ index 836a72a..aa00d49 100644
  }
 +EXPORT_SYMBOL_GPL(task_work_run);
 diff --git a/security/commoncap.c b/security/commoncap.c
-index 6bf72b1..26f55e5 100644
+index c25e0d2..9551659 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
 @@ -1269,12 +1269,14 @@ int cap_mmap_addr(unsigned long addr)
