@@ -71,7 +71,7 @@ index b00b7660..93e8a86 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index f8c10d3..7241686 100644
+index 065d99d..04486c3 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1348,6 +1348,28 @@ static inline int fixup_user_fault(struct task_struct *tsk,
@@ -104,7 +104,7 @@ index f8c10d3..7241686 100644
  		unsigned int gup_flags);
  extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
 diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 46f4ecf5..1340df3 100644
+index 1861ea8..d85a914 100644
 --- a/include/linux/mm_types.h
 +++ b/include/linux/mm_types.h
 @@ -260,6 +260,7 @@ struct vm_region {
@@ -124,10 +124,10 @@ index 46f4ecf5..1340df3 100644
  
  	atomic_long_t swap_readahead_info;
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 1064618..8937405 100644
+index 07cc743..b1d2b43 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -672,7 +672,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+@@ -676,7 +676,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
  			struct inode *inode = file_inode(file);
  			struct address_space *mapping = file->f_mapping;
  
@@ -150,10 +150,10 @@ index e3ac3ae..745b26c 100644
  obj-y += init-mm.o
  
 diff --git a/mm/filemap.c b/mm/filemap.c
-index 870971e..045dd0e 100644
+index 594d73f..7183aef 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2582,7 +2582,7 @@ int filemap_page_mkwrite(struct vm_fault *vmf)
+@@ -2590,7 +2590,7 @@ int filemap_page_mkwrite(struct vm_fault *vmf)
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);

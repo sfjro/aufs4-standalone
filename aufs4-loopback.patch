@@ -135,7 +135,7 @@ index d44de9d..095672b 100644
  }
  
 diff --git a/drivers/block/loop.h b/drivers/block/loop.h
-index f68c1d5..98b3d29 100644
+index 1f39567..128b137 100644
 --- a/drivers/block/loop.h
 +++ b/drivers/block/loop.h
 @@ -46,7 +46,7 @@ struct loop_device {
@@ -226,7 +226,7 @@ index 3c300125..128d790 100644
  
  /* ---------------------------------------------------------------------- */
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index b024533..fbbfdb8 100644
+index 8ab6566..8dbaa52 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1838,6 +1838,10 @@ struct super_operations {

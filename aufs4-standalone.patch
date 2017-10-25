@@ -21,7 +21,7 @@ index e3719a5..3203470 100644
  /**
   * d_ancestor - search for an ancestor
 diff --git a/fs/exec.c b/fs/exec.c
-index ac34d97..f42757e 100644
+index 3e14ba2..6818b01 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -109,6 +109,7 @@ bool path_noexec(const struct path *path)
@@ -93,10 +93,10 @@ index f7800d6..f31a6c7 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 4f508a1..c872ba2 100644
+index e5a4a7f..6d0c376 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -515,6 +515,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
+@@ -517,6 +517,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
  	mnt_dec_writers(real_mount(mnt));
  	preempt_enable();
  }
@@ -104,7 +104,7 @@ index 4f508a1..c872ba2 100644
  
  /**
   * mnt_drop_write - give up write access to a mount
-@@ -849,6 +850,7 @@ int is_current_mnt_ns(struct vfsmount *mnt)
+@@ -851,6 +852,7 @@ int is_current_mnt_ns(struct vfsmount *mnt)
  {
  	return check_mnt(real_mount(mnt));
  }
@@ -112,7 +112,7 @@ index 4f508a1..c872ba2 100644
  
  /*
   * vfsmount lock must be held for write
-@@ -1885,6 +1887,7 @@ int iterate_mounts(int (*f)(struct vfsmount *, void *), void *arg,
+@@ -1887,6 +1889,7 @@ int iterate_mounts(int (*f)(struct vfsmount *, void *), void *arg,
  	}
  	return 0;
  }
@@ -213,7 +213,7 @@ index 7ea1184..6e2e241 100644
  static int do_dentry_open(struct file *f,
  			  struct inode *inode,
 diff --git a/fs/read_write.c b/fs/read_write.c
-index cfd7de4..8623bd3 100644
+index 6aa8c7a..b5d392e 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -453,6 +453,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
@@ -281,7 +281,7 @@ index eb61780..32c5a05 100644
  /*
   * Write out and wait upon all dirty data associated with this
 diff --git a/fs/xattr.c b/fs/xattr.c
-index 4424f7f..15431ff 100644
+index 61cd28b..35570cd 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
 @@ -297,6 +297,7 @@ vfs_getxattr_alloc(struct dentry *dentry, const char *name, char **xattr_value,
@@ -292,6 +292,18 @@ index 4424f7f..15431ff 100644
  
  ssize_t
  __vfs_getxattr(struct dentry *dentry, struct inode *inode, const char *name,
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index bc97a97..895a1ba 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -155,6 +155,7 @@ inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)
+ 	}
+ 	return lock_classes + hlock->class_idx - 1;
+ }
++EXPORT_SYMBOL_GPL(lockdep_hlock_class);
+ #define hlock_class(hlock) lockdep_hlock_class(hlock)
+ 
+ #ifdef CONFIG_LOCK_STAT
 diff --git a/kernel/task_work.c b/kernel/task_work.c
 index 836a72a..aa00d49 100644
 --- a/kernel/task_work.c
@@ -302,10 +314,10 @@ index 836a72a..aa00d49 100644
  }
 +EXPORT_SYMBOL_GPL(task_work_run);
 diff --git a/security/commoncap.c b/security/commoncap.c
-index c25e0d2..9551659 100644
+index fc46f5b..90543ef 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
-@@ -1269,12 +1269,14 @@ int cap_mmap_addr(unsigned long addr)
+@@ -1270,12 +1270,14 @@ int cap_mmap_addr(unsigned long addr)
  	}
  	return ret;
  }

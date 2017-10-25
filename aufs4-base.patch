@@ -1,7 +1,7 @@
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 6671f37..2cadb88 100644
+index d85c089..858761c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -2465,6 +2465,19 @@ F:	include/linux/audit.h
@@ -102,10 +102,10 @@ index d1e35b5..f7800d6 100644
  	int (*update_time)(struct inode *, struct timespec *, int);
  
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 54059b1..4f508a1 100644
+index d18deb4..e5a4a7f 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -844,6 +844,12 @@ static inline int check_mnt(struct mount *mnt)
+@@ -846,6 +846,12 @@ static inline int check_mnt(struct mount *mnt)
  	return mnt->mnt_ns == current->nsproxy->mnt_ns;
  }
  
@@ -119,7 +119,7 @@ index 54059b1..4f508a1 100644
   * vfsmount lock must be held for write
   */
 diff --git a/fs/read_write.c b/fs/read_write.c
-index a2b9a47..cfd7de4 100644
+index f0d4b16..6aa8c7a 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -483,6 +483,28 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
@@ -205,7 +205,7 @@ index 61eb82c..e700888 100644
  static inline void fput_light(struct file *file, int fput_needed)
  {
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 339e737..b024533 100644
+index 13dab19..8ab6566 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1264,6 +1264,7 @@ extern void fasync_free(struct fasync_struct *);
@@ -253,6 +253,27 @@ index 339e737..b024533 100644
  extern int sync_filesystem(struct super_block *);
  extern const struct file_operations def_blk_fops;
  extern const struct file_operations def_chr_fops;
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index bfa8e0b..728d810 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -405,6 +405,8 @@ static inline int lockdep_match_key(struct lockdep_map *lock,
+ 	return lock->key == key;
+ }
+ 
++struct lock_class *lockdep_hlock_class(struct held_lock *hlock);
++
+ /*
+  * Acquire a lock.
+  *
+@@ -529,6 +531,7 @@ struct lock_class_key { };
+ 
+ #define lockdep_depth(tsk)	(0)
+ 
++#define lockdep_is_held(lock)			(1)
+ #define lockdep_is_held_type(l, r)		(1)
+ 
+ #define lockdep_assert_held(l)			do { (void)(l); } while (0)
 diff --git a/include/linux/mnt_namespace.h b/include/linux/mnt_namespace.h
 index 12b2ab5..8b810d1 100644
 --- a/include/linux/mnt_namespace.h
@@ -287,3 +308,24 @@ index db42746..12f3a5a 100644
 +			 struct pipe_inode_info *pipe, size_t len,
 +			 unsigned int flags);
  #endif
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index e36e652..bc97a97 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -144,7 +144,7 @@ static struct lock_list list_entries[MAX_LOCKDEP_ENTRIES];
+ unsigned long nr_lock_classes;
+ static struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
+ 
+-static inline struct lock_class *hlock_class(struct held_lock *hlock)
++inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)
+ {
+ 	if (!hlock->class_idx) {
+ 		/*
+@@ -155,6 +155,7 @@ static inline struct lock_class *hlock_class(struct held_lock *hlock)
+ 	}
+ 	return lock_classes + hlock->class_idx - 1;
+ }
++#define hlock_class(hlock) lockdep_hlock_class(hlock)
+ 
+ #ifdef CONFIG_LOCK_STAT
+ static DEFINE_PER_CPU(struct lock_class_stats[MAX_LOCKDEP_KEYS], cpu_lock_stats);
