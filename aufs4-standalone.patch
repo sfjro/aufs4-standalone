@@ -33,10 +33,10 @@ index 3e14ba2..6818b01 100644
  #ifdef CONFIG_USELIB
  /*
 diff --git a/fs/fcntl.c b/fs/fcntl.c
-index f51c2cf..58bf222 100644
+index cffefab..725d190 100644
 --- a/fs/fcntl.c
 +++ b/fs/fcntl.c
-@@ -84,6 +84,7 @@ int setfl(int fd, struct file * filp, unsigned long arg)
+@@ -85,6 +85,7 @@ int setfl(int fd, struct file * filp, unsigned long arg)
   out:
  	return error;
  }
@@ -213,10 +213,10 @@ index 7ea1184..6e2e241 100644
  static int do_dentry_open(struct file *f,
  			  struct inode *inode,
 diff --git a/fs/read_write.c b/fs/read_write.c
-index 6aa8c7a..b5d392e 100644
+index 2388284..b2a68e5 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
-@@ -453,6 +453,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
+@@ -454,6 +454,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
  
  	return ret;
  }
@@ -224,7 +224,7 @@ index 6aa8c7a..b5d392e 100644
  
  static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t len, loff_t *ppos)
  {
-@@ -493,6 +494,7 @@ vfs_readf_t vfs_readf(struct file *file)
+@@ -494,6 +495,7 @@ vfs_readf_t vfs_readf(struct file *file)
  		return new_sync_read;
  	return ERR_PTR(-ENOSYS);
  }
@@ -232,7 +232,7 @@ index 6aa8c7a..b5d392e 100644
  
  vfs_writef_t vfs_writef(struct file *file)
  {
-@@ -504,6 +506,7 @@ vfs_writef_t vfs_writef(struct file *file)
+@@ -505,6 +507,7 @@ vfs_writef_t vfs_writef(struct file *file)
  		return new_sync_write;
  	return ERR_PTR(-ENOSYS);
  }
@@ -240,7 +240,7 @@ index 6aa8c7a..b5d392e 100644
  
  ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
  {
-@@ -573,6 +576,7 @@ ssize_t vfs_write(struct file *file, const char __user *buf, size_t count, loff_
+@@ -574,6 +577,7 @@ ssize_t vfs_write(struct file *file, const char __user *buf, size_t count, loff_
  
  	return ret;
  }
@@ -269,10 +269,10 @@ index eb888c6..7ab89d2 100644
  /**
   * splice_direct_to_actor - splices data directly between two non-pipes
 diff --git a/fs/sync.c b/fs/sync.c
-index eb61780..32c5a05 100644
+index fe15900..e3386ea 100644
 --- a/fs/sync.c
 +++ b/fs/sync.c
-@@ -38,6 +38,7 @@ int __sync_filesystem(struct super_block *sb, int wait)
+@@ -39,6 +39,7 @@ int __sync_filesystem(struct super_block *sb, int wait)
  		sb->s_op->sync_fs(sb, wait);
  	return __sync_blockdev(sb->s_bdev, wait);
  }
@@ -305,10 +305,10 @@ index bc97a97..895a1ba 100644
  
  #ifdef CONFIG_LOCK_STAT
 diff --git a/kernel/task_work.c b/kernel/task_work.c
-index 836a72a..aa00d49 100644
+index 5718b3e..e6c64d9 100644
 --- a/kernel/task_work.c
 +++ b/kernel/task_work.c
-@@ -115,3 +115,4 @@ void task_work_run(void)
+@@ -116,3 +116,4 @@ void task_work_run(void)
  		} while (work);
  	}
  }
@@ -333,10 +333,10 @@ index fc46f5b..90543ef 100644
  #ifdef CONFIG_SECURITY
  
 diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index 03c1652..f88c84b 100644
+index 5ef7e52..e2e959d 100644
 --- a/security/device_cgroup.c
 +++ b/security/device_cgroup.c
-@@ -7,6 +7,7 @@
+@@ -8,6 +8,7 @@
  #include <linux/device_cgroup.h>
  #include <linux/cgroup.h>
  #include <linux/ctype.h>
@@ -344,7 +344,7 @@ index 03c1652..f88c84b 100644
  #include <linux/list.h>
  #include <linux/uaccess.h>
  #include <linux/seq_file.h>
-@@ -849,6 +850,7 @@ int __devcgroup_inode_permission(struct inode *inode, int mask)
+@@ -850,6 +851,7 @@ int __devcgroup_inode_permission(struct inode *inode, int mask)
  	return __devcgroup_check_permission(type, imajor(inode), iminor(inode),
  			access);
  }

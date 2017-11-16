@@ -13,10 +13,10 @@ index 7aee6d6..ec92031 100644
  endif # MISC_FILESYSTEMS
  
 diff --git a/fs/Makefile b/fs/Makefile
-index 7bbaca9..a026491 100644
+index ef772f1..51779e68c 100644
 --- a/fs/Makefile
 +++ b/fs/Makefile
-@@ -128,3 +128,4 @@ obj-y				+= exofs/ # Multiple modules
+@@ -129,3 +129,4 @@ obj-y				+= exofs/ # Multiple modules
  obj-$(CONFIG_CEPH_FS)		+= ceph/
  obj-$(CONFIG_PSTORE)		+= pstore/
  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
