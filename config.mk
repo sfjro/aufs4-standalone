@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
 
 # Kconfig
 # instead of setting 'n', leave it blank when you disable it.
