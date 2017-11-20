@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
 
 KDIR = /lib/modules/$(shell uname -r)/build
 Conf1=${KDIR}/include/config/auto.conf
