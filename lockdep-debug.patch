@@ -1,3 +1,4 @@
+SPDX-License-Identifier: GPL-2.0
 aufs4.14 lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
