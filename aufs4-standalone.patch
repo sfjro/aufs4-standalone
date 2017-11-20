@@ -1,3 +1,4 @@
+SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN standalone patch
 
 diff --git a/fs/dcache.c b/fs/dcache.c

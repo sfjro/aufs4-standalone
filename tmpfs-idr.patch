@@ -1,3 +1,4 @@
+SPDX-License-Identifier: GPL-2.0
 diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
 index ed91ce5..81877f8 100644
 --- a/include/linux/shmem_fs.h

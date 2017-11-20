@@ -1,3 +1,4 @@
+SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN kbuild patch
 
 diff --git a/fs/Kconfig b/fs/Kconfig
