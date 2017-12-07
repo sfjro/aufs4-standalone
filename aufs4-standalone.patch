@@ -22,7 +22,7 @@ index 019f14b..10c1a6d 100644
  /**
   * d_ancestor - search for an ancestor
 diff --git a/fs/exec.c b/fs/exec.c
-index 1d6243d..7652843 100644
+index 6be2aa0..1e003f9 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -109,6 +109,7 @@ bool path_noexec(const struct path *path)
@@ -82,7 +82,7 @@ index 2dc9f38..7bf57df 100644
  void __init files_init(void)
  {
 diff --git a/fs/inode.c b/fs/inode.c
-index 133fb6b..3638d6d 100644
+index 517883c..5cece5e 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
 @@ -1664,6 +1664,7 @@ int update_time(struct inode *inode, struct timespec *time, int flags)
