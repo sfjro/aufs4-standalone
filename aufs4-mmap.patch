@@ -30,7 +30,7 @@ index 7563437..7c0dc0f 100644
  		ino = inode->i_ino;
  	}
 diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index f401682..79ea96a 100644
+index f401682..79ea96a8 100644
 --- a/fs/proc/task_mmu.c
 +++ b/fs/proc/task_mmu.c
 @@ -292,7 +292,10 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
