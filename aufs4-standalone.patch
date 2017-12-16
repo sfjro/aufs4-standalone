@@ -294,7 +294,7 @@ index 61cd28b..35570cd 100644
  ssize_t
  __vfs_getxattr(struct dentry *dentry, struct inode *inode, const char *name,
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 4f3acd2..425d4a2 100644
+index 2cd0282..af59768 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
 @@ -167,6 +167,7 @@ inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)

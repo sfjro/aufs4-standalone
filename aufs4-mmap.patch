@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 28fa852..0f3e998 100644
+index 60316b5..ce5314e 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
 @@ -1987,7 +1987,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
