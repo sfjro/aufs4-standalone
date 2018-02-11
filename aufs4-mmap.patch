@@ -125,7 +125,7 @@ index cfd0ac4..135e11c 100644
  
  	atomic_long_t swap_readahead_info;
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 432eadf..8b2ba5b 100644
+index 2295fc6..80e1fee 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -676,7 +676,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
@@ -164,7 +164,7 @@ index ee83baa..7677d13 100644
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index a4d5468..cb06cbd 100644
+index 9efdc021..d77f01f 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -171,7 +171,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)

@@ -22,7 +22,7 @@ index 019f14b..10c1a6d 100644
  /**
   * d_ancestor - search for an ancestor
 diff --git a/fs/exec.c b/fs/exec.c
-index 6be2aa0..1e003f9 100644
+index 5688b5e..1041a4c 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -109,6 +109,7 @@ bool path_noexec(const struct path *path)
@@ -94,7 +94,7 @@ index 517883c..5cece5e 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 312bdbd8..a5baeb5 100644
+index 26ef600..a4b9707 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -517,6 +517,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
@@ -294,10 +294,10 @@ index 61cd28b..35570cd 100644
  ssize_t
  __vfs_getxattr(struct dentry *dentry, struct inode *inode, const char *name,
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 2cd0282..af59768 100644
+index 43c6dbf..3474f0e 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
-@@ -167,6 +167,7 @@ inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)
+@@ -150,6 +150,7 @@ inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)
  	}
  	return lock_classes + hlock->class_idx - 1;
  }

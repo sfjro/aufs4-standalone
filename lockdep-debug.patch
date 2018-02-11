@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 453e941..ec500a7 100644
+index 1576656..bd45186 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -17,7 +17,7 @@ struct lockdep_map;
@@ -14,7 +14,7 @@ index 453e941..ec500a7 100644
  
  #include <linux/types.h>
  
-@@ -214,7 +214,7 @@ struct lock_chain {
+@@ -208,7 +208,7 @@ struct lock_chain {
  	u64				chain_key;
  };
  
