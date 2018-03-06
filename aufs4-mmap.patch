@@ -125,7 +125,7 @@ index fd1af6b..89ec438 100644
  
  	atomic_long_t swap_readahead_info;
 diff --git a/kernel/fork.c b/kernel/fork.c
-index be8aa5b..9355e61 100644
+index e5d9d40..f6f6fbf 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -474,7 +474,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,

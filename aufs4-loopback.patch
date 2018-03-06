@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index c292afa..a93038c 100644
+index 962b2d6..d17f695 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
 @@ -600,6 +600,15 @@ static inline void loop_update_dio(struct loop_device *lo)
@@ -227,7 +227,7 @@ index eef60a6..e03a658 100644
  
  /* ---------------------------------------------------------------------- */
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c45f413..742e9ad 100644
+index 383ab06..e899b15 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1849,6 +1849,10 @@ struct super_operations {
