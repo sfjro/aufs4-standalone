@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2017 Junjiro R. Okajima
+ * Copyright (C) 2011-2018 Junjiro R. Okajima
  *
  * This program, aufs is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,7 +183,8 @@ static unsigned int au_fhsm_poll(struct file *file,
 	if (atomic_read(&fhsm->fhsm_readable))
 		mask = POLLIN /* | POLLRDNORM */;
 
-	AuDbg("mask 0x%x\n", mask);
+	if (!mask)
+		AuDbg("mask 0x%x\n", mask);
 	return mask;
 }
 
