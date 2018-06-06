@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 1b2ede6..dc3fd6d 100644
+index 1a76d75..77f698e 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
 @@ -2024,7 +2024,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
@@ -72,7 +72,7 @@ index 5b62f57..dfb4a3b 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1ac1f06..49997d9 100644
+index 02a616e..01b3bb9 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1380,6 +1380,28 @@ static inline void unmap_shared_mapping_range(struct address_space *mapping,
@@ -164,10 +164,10 @@ index 0604cb0..45d2369 100644
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 188f195..3c1ca1d 100644
+index fc41c05..e376869 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -171,7 +171,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
+@@ -180,7 +180,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
  	if (vma->vm_ops && vma->vm_ops->close)
  		vma->vm_ops->close(vma);
  	if (vma->vm_file)
@@ -176,7 +176,7 @@ index 188f195..3c1ca1d 100644
  	mpol_put(vma_policy(vma));
  	kmem_cache_free(vm_area_cachep, vma);
  	return next;
-@@ -896,7 +896,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+@@ -905,7 +905,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
  	if (remove_next) {
  		if (file) {
  			uprobe_munmap(next, next->vm_start, next->vm_end);
@@ -185,7 +185,7 @@ index 188f195..3c1ca1d 100644
  		}
  		if (next->anon_vma)
  			anon_vma_merge(vma, next);
-@@ -1779,8 +1779,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+@@ -1820,8 +1820,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
  	return addr;
  
  unmap_and_free_vma:
@@ -195,7 +195,7 @@ index 188f195..3c1ca1d 100644
  
  	/* Undo any partial mapping done by a device driver. */
  	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
-@@ -2604,7 +2604,7 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
+@@ -2645,7 +2645,7 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
  		goto out_free_mpol;
  
  	if (new->vm_file)
@@ -204,7 +204,7 @@ index 188f195..3c1ca1d 100644
  
  	if (new->vm_ops && new->vm_ops->open)
  		new->vm_ops->open(new);
-@@ -2623,7 +2623,7 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
+@@ -2664,7 +2664,7 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
  	if (new->vm_ops && new->vm_ops->close)
  		new->vm_ops->close(new);
  	if (new->vm_file)
@@ -213,7 +213,7 @@ index 188f195..3c1ca1d 100644
  	unlink_anon_vmas(new);
   out_free_mpol:
  	mpol_put(vma_policy(new));
-@@ -2785,7 +2785,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+@@ -2826,7 +2826,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
  	struct vm_area_struct *vma;
  	unsigned long populate = 0;
  	unsigned long ret = -EINVAL;
@@ -222,7 +222,7 @@ index 188f195..3c1ca1d 100644
  
  	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/vm/remap_file_pages.txt.\n",
  		     current->comm, current->pid);
-@@ -2860,10 +2860,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+@@ -2901,10 +2901,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
  		}
  	}
  
@@ -251,7 +251,7 @@ index 188f195..3c1ca1d 100644
  out:
  	up_write(&mm->mmap_sem);
  	if (populate)
-@@ -3171,7 +3188,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+@@ -3220,7 +3237,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
  		if (anon_vma_clone(new_vma, vma))
  			goto out_free_mempol;
  		if (new_vma->vm_file)

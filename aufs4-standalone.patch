@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN standalone patch
 
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 213ddcd..137176b 100644
+index ff338e2..3e2bae8 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
 @@ -1342,6 +1342,7 @@ void d_walk(struct dentry *parent, void *data,
@@ -13,7 +13,7 @@ index 213ddcd..137176b 100644
  
  struct check_mount {
  	struct vfsmount *mnt;
-@@ -2920,6 +2921,7 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
+@@ -2942,6 +2943,7 @@ void d_exchange(struct dentry *dentry1, struct dentry *dentry2)
  
  	write_sequnlock(&rename_lock);
  }
@@ -82,10 +82,10 @@ index 7ec0b3e..819ee07 100644
  void __init files_init(void)
  {
 diff --git a/fs/inode.c b/fs/inode.c
-index 68b3b45..af4551e 100644
+index e0c5255..ff36056 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1671,6 +1671,7 @@ int update_time(struct inode *inode, struct timespec *time, int flags)
+@@ -1672,6 +1672,7 @@ int update_time(struct inode *inode, struct timespec *time, int flags)
  
  	return update_time(inode, time, flags);
  }
@@ -194,7 +194,7 @@ index e9191b4..1f8ccfa 100644
  /*
   * Destroy all marks in destroy_list, waits for SRCU period to finish before
 diff --git a/fs/open.c b/fs/open.c
-index c5ee7cd..86bfe2d 100644
+index d0e955b..527bc1a 100644
 --- a/fs/open.c
 +++ b/fs/open.c
 @@ -64,6 +64,7 @@ int do_truncate(struct dentry *dentry, loff_t length, unsigned int time_attrs,
@@ -204,6 +204,14 @@ index c5ee7cd..86bfe2d 100644
 +EXPORT_SYMBOL_GPL(do_truncate);
  
  long vfs_truncate(const struct path *path, loff_t length)
+ {
+@@ -723,6 +724,7 @@ SYSCALL_DEFINE3(fchown, unsigned int, fd, uid_t, user, gid_t, group)
+ {
+ 	return ksys_fchown(fd, user, group);
+ }
++EXPORT_SYMBOL_GPL(open_check_o_direct);
+ 
+ int open_check_o_direct(struct file *f)
  {
 diff --git a/fs/read_write.c b/fs/read_write.c
 index ddd6e67..aabf92d 100644
@@ -307,10 +315,10 @@ index 0fef395..83fb1ec 100644
  }
 +EXPORT_SYMBOL_GPL(task_work_run);
 diff --git a/security/commoncap.c b/security/commoncap.c
-index 48620c9..4981104 100644
+index 1ce701f..a0d106e 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
-@@ -1330,12 +1330,14 @@ int cap_mmap_addr(unsigned long addr)
+@@ -1332,12 +1332,14 @@ int cap_mmap_addr(unsigned long addr)
  	}
  	return ret;
  }

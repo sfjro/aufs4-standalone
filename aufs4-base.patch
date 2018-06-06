@@ -2,10 +2,10 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 92be777..138f5e6 100644
+index 9c125f7..4616bbf 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2517,6 +2517,19 @@ F:	include/linux/audit.h
+@@ -2519,6 +2519,19 @@ F:	include/linux/audit.h
  F:	include/uapi/linux/audit.h
  F:	kernel/audit*
  
@@ -26,10 +26,10 @@ index 92be777..138f5e6 100644
  M:	Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>
  W:	http://miguelojeda.es/auxdisplay.htm
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index c9d0449..79902c1 100644
+index 55cf554..bc965e5 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -691,6 +691,24 @@ static inline int is_loop_device(struct file *file)
+@@ -713,6 +713,24 @@ static inline int is_loop_device(struct file *file)
  	return i && S_ISBLK(i->i_mode) && MAJOR(i->i_rdev) == LOOP_MAJOR;
  }
  
@@ -55,7 +55,7 @@ index c9d0449..79902c1 100644
  
  static ssize_t loop_attr_show(struct device *dev, char *page,
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 86d2de6..213ddcd 100644
+index 2acfc69..ff338e2 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
 @@ -1234,7 +1234,7 @@ enum d_walk_ret {
@@ -90,10 +90,10 @@ index d737ff0..7550799 100644
  		return error;
  
 diff --git a/fs/inode.c b/fs/inode.c
-index 13ceb98..68b3b45 100644
+index 3b55391..e0c5255 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1662,7 +1662,7 @@ EXPORT_SYMBOL(generic_update_time);
+@@ -1663,7 +1663,7 @@ EXPORT_SYMBOL(generic_update_time);
   * This does the actual work of updating an inodes time or version.  Must have
   * had called mnt_want_write() before calling this.
   */
