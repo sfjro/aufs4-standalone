@@ -130,7 +130,7 @@ static int do_pri_inode(aufs_bindex_t bindex, struct inode *inode, int hn,
 	     inode->i_ino, inode->i_sb ? au_sbtype(inode->i_sb) : "??",
 	     atomic_read(&inode->i_count), inode->i_nlink, inode->i_mode,
 	     i_size_read(inode), (unsigned long long)inode->i_blocks,
-	     hn, (long long)timespec_to_ns(&inode->i_ctime) & 0x0ffff,
+	     hn, (long long)timespec64_to_ns(&inode->i_ctime) & 0x0ffff,
 	     inode->i_mapping ? inode->i_mapping->nrpages : 0,
 	     inode->i_state, inode->i_flags, inode_peek_iversion(inode),
 	     inode->i_generation,
@@ -305,7 +305,7 @@ static int do_pri_br(aufs_bindex_t bindex, struct au_branch *br)
 	     bindex, br->br_perm, br->br_id, au_br_count(br),
 	     br->br_wbr, au_sbtype(sb), MAJOR(sb->s_dev), MINOR(sb->s_dev),
 	     sb->s_flags, sb->s_count,
-	     atomic_read(&sb->s_active), !!br->br_xino.xi_file);
+	     atomic_read(&sb->s_active), !!au_xino_file(br));
 	return 0;
 
 out:
