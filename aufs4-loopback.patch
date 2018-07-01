@@ -2,10 +2,10 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bc965e5..852868a 100644
+index c0898a4..44edece 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -622,6 +622,15 @@ static inline void loop_update_dio(struct loop_device *lo)
+@@ -626,6 +626,15 @@ static inline void loop_update_dio(struct loop_device *lo)
  			lo->use_dio);
  }
  
@@ -21,7 +21,7 @@ index bc965e5..852868a 100644
  static void loop_reread_partitions(struct loop_device *lo,
  				   struct block_device *bdev)
  {
-@@ -656,6 +665,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -690,6 +699,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  			  unsigned int arg)
  {
  	struct file	*file, *old_file;
@@ -29,7 +29,7 @@ index bc965e5..852868a 100644
  	struct inode	*inode;
  	int		error;
  
-@@ -672,9 +682,16 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -706,6 +716,12 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  	file = fget(arg);
  	if (!file)
  		goto out;
@@ -40,13 +40,17 @@ index bc965e5..852868a 100644
 +		get_file(file);
 +	}
  
+ 	error = loop_validate_file(file, bdev);
+ 	if (error)
+@@ -713,6 +729,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+ 
  	inode = file->f_mapping->host;
  	old_file = lo->lo_backing_file;
 +	old_virt_file = lo->lo_backing_virt_file;
  
  	error = -EINVAL;
  
-@@ -689,6 +706,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -724,6 +741,7 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  	blk_mq_freeze_queue(lo->lo_queue);
  	mapping_set_gfp_mask(old_file->f_mapping, lo->old_gfp_mask);
  	lo->lo_backing_file = file;
@@ -54,7 +58,7 @@ index bc965e5..852868a 100644
  	lo->old_gfp_mask = mapping_gfp_mask(file->f_mapping);
  	mapping_set_gfp_mask(file->f_mapping,
  			     lo->old_gfp_mask & ~(__GFP_IO|__GFP_FS));
-@@ -696,12 +714,16 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
+@@ -731,12 +749,16 @@ static int loop_change_fd(struct loop_device *lo, struct block_device *bdev,
  	blk_mq_unfreeze_queue(lo->lo_queue);
  
  	fput(old_file);
@@ -71,16 +75,16 @@ index bc965e5..852868a 100644
   out:
  	return error;
  }
-@@ -895,7 +917,7 @@ static int loop_prepare_queue(struct loop_device *lo)
+@@ -924,7 +946,7 @@ static int loop_prepare_queue(struct loop_device *lo)
  static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  		       struct block_device *bdev, unsigned int arg)
  {
--	struct file	*file, *f;
+-	struct file	*file;
 +	struct file	*file, *f, *virt_file = NULL;
  	struct inode	*inode;
  	struct address_space *mapping;
  	int		lo_flags = 0;
-@@ -909,6 +931,12 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -938,6 +960,12 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  	file = fget(arg);
  	if (!file)
  		goto out;
@@ -93,7 +97,7 @@ index bc965e5..852868a 100644
  
  	error = -EBUSY;
  	if (lo->lo_state != Lo_unbound)
-@@ -957,6 +985,7 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -970,6 +998,7 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  	lo->lo_device = bdev;
  	lo->lo_flags = lo_flags;
  	lo->lo_backing_file = file;
@@ -101,7 +105,7 @@ index bc965e5..852868a 100644
  	lo->transfer = NULL;
  	lo->ioctl = NULL;
  	lo->lo_sizelimit = 0;
-@@ -990,6 +1019,8 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
+@@ -1003,6 +1032,8 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
  
   out_putf:
  	fput(file);
@@ -110,7 +114,7 @@ index bc965e5..852868a 100644
   out:
  	/* This is safe: open() is still holding a reference. */
  	module_put(THIS_MODULE);
-@@ -1036,6 +1067,7 @@ loop_init_xfer(struct loop_device *lo, struct loop_func_table *xfer,
+@@ -1049,6 +1080,7 @@ loop_init_xfer(struct loop_device *lo, struct loop_func_table *xfer,
  static int loop_clr_fd(struct loop_device *lo)
  {
  	struct file *filp = lo->lo_backing_file;
@@ -118,7 +122,7 @@ index bc965e5..852868a 100644
  	gfp_t gfp = lo->old_gfp_mask;
  	struct block_device *bdev = lo->lo_device;
  
-@@ -1067,6 +1099,7 @@ static int loop_clr_fd(struct loop_device *lo)
+@@ -1080,6 +1112,7 @@ static int loop_clr_fd(struct loop_device *lo)
  	spin_lock_irq(&lo->lo_lock);
  	lo->lo_state = Lo_rundown;
  	lo->lo_backing_file = NULL;
@@ -126,7 +130,7 @@ index bc965e5..852868a 100644
  	spin_unlock_irq(&lo->lo_lock);
  
  	loop_release_xfer(lo);
-@@ -1115,6 +1148,8 @@ static int loop_clr_fd(struct loop_device *lo)
+@@ -1128,6 +1161,8 @@ static int loop_clr_fd(struct loop_device *lo)
  	 * bd_mutex which is usually taken before lo_ctl_mutex.
  	 */
  	fput(filp);
@@ -136,7 +140,7 @@ index bc965e5..852868a 100644
  }
  
 diff --git a/drivers/block/loop.h b/drivers/block/loop.h
-index b78de98..2bbbd92 100644
+index 4d42c7a..a4974ee 100644
 --- a/drivers/block/loop.h
 +++ b/drivers/block/loop.h
 @@ -46,7 +46,7 @@ struct loop_device {
@@ -211,10 +215,10 @@ index dc3f3be..c33d060 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index 80644ef..19cde48 100644
+index ae23194..e4bc808 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
-@@ -843,7 +843,10 @@ static const struct super_operations aufs_sop = {
+@@ -840,7 +840,10 @@ static const struct super_operations aufs_sop = {
  	.statfs		= aufs_statfs,
  	.put_super	= aufs_put_super,
  	.sync_fs	= aufs_sync_fs,
@@ -227,10 +231,10 @@ index 80644ef..19cde48 100644
  
  /* ---------------------------------------------------------------------- */
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 09a2542..11a6346 100644
+index 4addb46..06d62e9 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
-@@ -1852,6 +1852,10 @@ struct super_operations {
+@@ -1863,6 +1863,10 @@ struct super_operations {
  				  struct shrink_control *);
  	long (*free_cached_objects)(struct super_block *,
  				    struct shrink_control *);
