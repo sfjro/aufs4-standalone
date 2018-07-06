@@ -306,12 +306,12 @@ index 4452d8b..d621193 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..14efc4f
+index 0000000..37e95e1
 --- /dev/null
 +++ b/mm/prfile.c
 @@ -0,0 +1,86 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * SPDX-License-Identifier: GPL-2.0
 + * Mainly for aufs which mmap(2) different file and wants to print different
 + * path in /proc/PID/maps.
 + * Call these functions via macros defined in linux/mm.h.
