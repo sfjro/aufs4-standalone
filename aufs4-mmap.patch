@@ -31,7 +31,7 @@ index 3b63be6..fb9913b 100644
  		ino = inode->i_ino;
  	}
 diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index e967901..f6b7286 100644
+index dfd73a4..ed2ce10 100644
 --- a/fs/proc/task_mmu.c
 +++ b/fs/proc/task_mmu.c
 @@ -306,7 +306,10 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
@@ -46,7 +46,7 @@ index e967901..f6b7286 100644
  		dev = inode->i_sb->s_dev;
  		ino = inode->i_ino;
  		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
-@@ -1733,7 +1736,7 @@ static int show_numa_map(struct seq_file *m, void *v, int is_pid)
+@@ -1734,7 +1737,7 @@ static int show_numa_map(struct seq_file *m, void *v, int is_pid)
  	struct proc_maps_private *proc_priv = &numa_priv->proc_maps;
  	struct vm_area_struct *vma = v;
  	struct numa_maps *md = &numa_priv->md;
@@ -164,7 +164,7 @@ index 52517f2..250f675 100644
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index d1eb87e..72bd98d 100644
+index 5801b5f..2f8e6de 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -180,7 +180,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
@@ -251,7 +251,7 @@ index d1eb87e..72bd98d 100644
  out:
  	up_write(&mm->mmap_sem);
  	if (populate)
-@@ -3220,7 +3237,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+@@ -3215,7 +3232,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
  		if (anon_vma_clone(new_vma, vma))
  			goto out_free_mempol;
  		if (new_vma->vm_file)
@@ -306,11 +306,11 @@ index 4452d8b..d621193 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..37e95e1
+index 0000000..a27ac36
 --- /dev/null
 +++ b/mm/prfile.c
 @@ -0,0 +1,86 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Mainly for aufs which mmap(2) different file and wants to print different
 + * path in /proc/PID/maps.
