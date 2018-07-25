@@ -157,7 +157,7 @@ index fbe3cbe..bdfc61e 100644
  int fsnotify_fasync(int fd, struct file *file, int on)
  {
 diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-index 6043306..fdb50e4 100644
+index 6043306..3312f76 100644
 --- a/fs/notify/mark.c
 +++ b/fs/notify/mark.c
 @@ -113,6 +113,7 @@ void fsnotify_put_mark(struct fsnotify_mark *mark)
@@ -176,14 +176,14 @@ index 6043306..fdb50e4 100644
  
  void fsnotify_destroy_marks(struct hlist_head *head, spinlock_t *lock)
  {
-@@ -415,6 +417,7 @@ int fsnotify_add_mark_locked(struct fsnotify_mark *mark,
- 
+@@ -425,6 +427,7 @@ int fsnotify_add_mark(struct fsnotify_mark *mark, struct fsnotify_group *group,
+ 	mutex_unlock(&group->mark_mutex);
  	return ret;
  }
 +EXPORT_SYMBOL_GPL(fsnotify_add_mark);
  
- int fsnotify_add_mark(struct fsnotify_mark *mark, struct fsnotify_group *group,
- 		      struct inode *inode, struct vfsmount *mnt, int allow_dups)
+ /*
+  * Given a list of marks, find the mark associated with given group. If found
 @@ -521,6 +524,7 @@ void fsnotify_init_mark(struct fsnotify_mark *mark,
  	atomic_set(&mark->refcnt, 1);
  	mark->free_mark = free_mark;
