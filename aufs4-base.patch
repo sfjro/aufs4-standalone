@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 192d7f7..2f164a6 100644
+index 0fe4228..52cedab 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -2541,6 +2541,19 @@ F:	include/linux/audit.h
@@ -206,7 +206,7 @@ index 279720d..76e38ea 100644
  static inline void fput_light(struct file *file, int fput_needed)
  {
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index d78d146..3a9d5b4 100644
+index 805bf22..0d0d247f 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1273,6 +1273,7 @@ extern void fasync_free(struct fasync_struct *);
@@ -246,7 +246,7 @@ index d78d146..3a9d5b4 100644
  
  /* /sys/fs */
  extern struct kobject *fs_kobj;
-@@ -2504,6 +2513,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
+@@ -2505,6 +2514,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
  	return false;
  }
  #endif
