@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 0fe4228..52cedab 100644
+index 544cac8..aaa1c7a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -2541,6 +2541,19 @@ F:	include/linux/audit.h
@@ -55,10 +55,10 @@ index 4cb1d1b..5678bf8 100644
  
  static ssize_t loop_attr_show(struct device *dev, char *page,
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 0e8e5de..88de3b6 100644
+index ceb7b49..88a1514 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1240,7 +1240,7 @@ enum d_walk_ret {
+@@ -1237,7 +1237,7 @@ enum d_walk_ret {
   *
   * The @enter() callbacks are called with d_lock held.
   */
@@ -103,10 +103,10 @@ index 8c86c80..af894e7 100644
  	int (*update_time)(struct inode *, struct timespec64 *, int);
  
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 8ddd148..ee649e0 100644
+index bd2f4c6..eb7cd21 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -846,6 +846,12 @@ static inline int check_mnt(struct mount *mnt)
+@@ -855,6 +855,12 @@ static inline int check_mnt(struct mount *mnt)
  	return mnt->mnt_ns == current->nsproxy->mnt_ns;
  }
  
