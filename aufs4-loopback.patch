@@ -149,10 +149,10 @@ index dfc54ce..4a0829d 100644
  	void		*key_data; 
  
 diff --git a/fs/aufs/f_op.c b/fs/aufs/f_op.c
-index 937a20d..1355656 100644
+index 38f8e11..f85135d 100644
 --- a/fs/aufs/f_op.c
 +++ b/fs/aufs/f_op.c
-@@ -358,7 +358,7 @@ static ssize_t aufs_read_iter(struct kiocb *kio, struct iov_iter *iov_iter)
+@@ -359,7 +359,7 @@ static ssize_t aufs_read_iter(struct kiocb *kio, struct iov_iter *iov_iter)
  	if (IS_ERR(h_file))
  		goto out;
  
@@ -211,10 +211,10 @@ index 05d703d..6bb23c8 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index e21a5da..7da2d23 100644
+index e405c14..3d9fa3c 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
-@@ -838,7 +838,10 @@ static const struct super_operations aufs_sop = {
+@@ -841,7 +841,10 @@ static const struct super_operations aufs_sop = {
  	.statfs		= aufs_statfs,
  	.put_super	= aufs_put_super,
  	.sync_fs	= aufs_sync_fs,
