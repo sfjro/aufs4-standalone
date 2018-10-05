@@ -20,7 +20,7 @@ index f155dc6..ed9ec5b 100644
  	umode_t mode;		    /* Mount mode for root directory */
  	unsigned char huge;	    /* Whether to try for hugepages */
 diff --git a/mm/shmem.c b/mm/shmem.c
-index 41b9bbf..3b4b410 100644
+index 41b9bbf..f8f229f 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
 @@ -111,9 +111,13 @@ static unsigned long shmem_default_max_blocks(void)
@@ -172,6 +172,15 @@ index 41b9bbf..3b4b410 100644
  	int error = -EINVAL;
  
  	config.mpol = NULL;
+@@ -3446,7 +3455,7 @@ static int shmem_show_options(struct seq_file *seq, struct dentry *root)
+ 		seq_printf(seq, ",size=%luk",
+ 			sbinfo->max_blocks << (PAGE_SHIFT - 10));
+ 	if (sbinfo->max_inodes != shmem_default_max_inodes())
+-		seq_printf(seq, ",nr_inodes=%lu", sbinfo->max_inodes);
++		seq_printf(seq, ",nr_inodes=%d", sbinfo->max_inodes);
+ 	if (sbinfo->mode != (0777 | S_ISVTX))
+ 		seq_printf(seq, ",mode=%03ho", sbinfo->mode);
+ 	if (!uid_eq(sbinfo->uid, GLOBAL_ROOT_UID))
 @@ -3470,6 +3479,8 @@ static void shmem_put_super(struct super_block *sb)
  {
  	struct shmem_sb_info *sbinfo = SHMEM_SB(sb);
