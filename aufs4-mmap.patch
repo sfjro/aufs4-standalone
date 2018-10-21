@@ -2,10 +2,10 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index ccf86f1..a44e9d9 100644
+index 7e9f07bf..3ab5901 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
-@@ -2002,7 +2002,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
+@@ -2016,7 +2016,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
  	down_read(&mm->mmap_sem);
  	vma = find_exact_vma(mm, vm_start, vm_end);
  	if (vma && vma->vm_file) {
@@ -72,7 +72,7 @@ index 0b63d68..400d1c5 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a61ebe8..111f031 100644
+index 0416a72..4a298a9 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1440,6 +1440,28 @@ static inline void unmap_shared_mapping_range(struct address_space *mapping,
@@ -164,7 +164,7 @@ index 52517f2..250f675 100644
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 5f2b2b1..d71330c 100644
+index f7cd9cb..515e88a 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -180,7 +180,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)

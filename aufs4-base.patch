@@ -2,10 +2,10 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 02a3961..48f7c35 100644
+index 6ac000c..16404bb 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2606,6 +2606,19 @@ F:	include/linux/audit.h
+@@ -2605,6 +2605,19 @@ F:	include/linux/audit.h
  F:	include/uapi/linux/audit.h
  F:	kernel/audit*
  
@@ -120,7 +120,7 @@ index 9918655..72c93f3 100644
   * vfsmount lock must be held for write
   */
 diff --git a/fs/read_write.c b/fs/read_write.c
-index 39b4a21..19f8e04 100644
+index 8a2737f..42f64cc 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -489,6 +489,28 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
@@ -194,7 +194,7 @@ index b54e054..2860782 100644
  	if (wait)
  		sync_inodes_sb(sb);
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 6c0b4a1..183b7a8 100644
+index 897eae8..7fb92a9 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1286,6 +1286,7 @@ extern void fasync_free(struct fasync_struct *);
@@ -226,7 +226,7 @@ index 6c0b4a1..183b7a8 100644
  extern ssize_t __vfs_read(struct file *, char __user *, size_t, loff_t *);
  extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
  extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
-@@ -2241,6 +2249,7 @@ extern int current_umask(void);
+@@ -2243,6 +2251,7 @@ extern int current_umask(void);
  extern void ihold(struct inode * inode);
  extern void iput(struct inode *);
  extern int generic_update_time(struct inode *, struct timespec64 *, int);
@@ -234,7 +234,7 @@ index 6c0b4a1..183b7a8 100644
  
  /* /sys/fs */
  extern struct kobject *fs_kobj;
-@@ -2528,6 +2537,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
+@@ -2530,6 +2539,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
  	return false;
  }
  #endif

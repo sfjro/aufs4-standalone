@@ -198,7 +198,7 @@ index 0285ce7..cb81623 100644
  long vfs_truncate(const struct path *path, loff_t length)
  {
 diff --git a/fs/read_write.c b/fs/read_write.c
-index 19f8e04..ae78ca8 100644
+index 42f64cc..d9cb969 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -459,6 +459,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
@@ -266,7 +266,7 @@ index 2860782..ffd7ea4 100644
  /*
   * Write out and wait upon all dirty data associated with this
 diff --git a/fs/xattr.c b/fs/xattr.c
-index daa7325..b550ad3 100644
+index 0d6a6a4..7ce4701 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
 @@ -295,6 +295,7 @@ vfs_getxattr_alloc(struct dentry *dentry, const char *name, char **xattr_value,
