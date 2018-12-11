@@ -2,10 +2,10 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 0abecc5..b1850f4 100644
+index 8119141..5e84420 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2589,6 +2589,19 @@ F:	include/linux/audit.h
+@@ -2590,6 +2590,19 @@ F:	include/linux/audit.h
  F:	include/uapi/linux/audit.h
  F:	kernel/audit*
  
@@ -90,10 +90,10 @@ index 0831851..78234ee 100644
  		return error;
  
 diff --git a/fs/inode.c b/fs/inode.c
-index 9e198f0..986ea7d 100644
+index 35d2108..d2395eb 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1657,7 +1657,7 @@ EXPORT_SYMBOL(generic_update_time);
+@@ -1660,7 +1660,7 @@ EXPORT_SYMBOL(generic_update_time);
   * This does the actual work of updating an inodes time or version.  Must have
   * had called mnt_want_write() before calling this.
   */
@@ -103,7 +103,7 @@ index 9e198f0..986ea7d 100644
  	int (*update_time)(struct inode *, struct timespec64 *, int);
  
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 74f6429..bdb9190 100644
+index a7f9126..46ed643 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -770,6 +770,12 @@ static inline int check_mnt(struct mount *mnt)
@@ -120,7 +120,7 @@ index 74f6429..bdb9190 100644
   * vfsmount lock must be held for write
   */
 diff --git a/fs/read_write.c b/fs/read_write.c
-index bfcb4ce..646b9023 100644
+index 58f3053..a2a55ea 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -489,6 +489,28 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
@@ -153,7 +153,7 @@ index bfcb4ce..646b9023 100644
  {
  	mm_segment_t old_fs;
 diff --git a/fs/splice.c b/fs/splice.c
-index 3553f195..b5ad1f0 100644
+index de2ede0..5dcf77b 100644
 --- a/fs/splice.c
 +++ b/fs/splice.c
 @@ -837,8 +837,8 @@ EXPORT_SYMBOL(generic_splice_sendpage);

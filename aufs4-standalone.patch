@@ -74,10 +74,10 @@ index e49af4c..569020f 100644
  void __init files_init(void)
  {
 diff --git a/fs/inode.c b/fs/inode.c
-index 986ea7d..0e46bc3 100644
+index d2395eb..b8be7be 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1666,6 +1666,7 @@ int update_time(struct inode *inode, struct timespec64 *time, int flags)
+@@ -1669,6 +1669,7 @@ int update_time(struct inode *inode, struct timespec64 *time, int flags)
  
  	return update_time(inode, time, flags);
  }
@@ -86,7 +86,7 @@ index 986ea7d..0e46bc3 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index bdb9190..5770b94 100644
+index 46ed643..44502c2 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -437,6 +437,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
@@ -198,7 +198,7 @@ index 0285ce7..cb81623 100644
  long vfs_truncate(const struct path *path, loff_t length)
  {
 diff --git a/fs/read_write.c b/fs/read_write.c
-index 646b9023..90005bc 100644
+index a2a55ea..a1366ed 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -459,6 +459,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
@@ -234,7 +234,7 @@ index 646b9023..90005bc 100644
  static inline loff_t file_pos_read(struct file *file)
  {
 diff --git a/fs/splice.c b/fs/splice.c
-index b5ad1f0..0879280 100644
+index 5dcf77b..63fe265 100644
 --- a/fs/splice.c
 +++ b/fs/splice.c
 @@ -850,6 +850,7 @@ long do_splice_from(struct pipe_inode_info *pipe, struct file *out,
