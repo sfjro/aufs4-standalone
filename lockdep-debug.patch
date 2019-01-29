@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index a5ccac5..36dac8e 100644
+index 4e48a5059536..a49002622451 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -17,7 +17,7 @@ struct lockdep_map;
@@ -15,7 +15,7 @@ index a5ccac5..36dac8e 100644
  #include <linux/types.h>
  
 diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-index e91ec9d..7c63916 100644
+index e91ec9ddcd30..7c63916d235d 100644
 --- a/include/linux/rculist.h
 +++ b/include/linux/rculist.h
 @@ -132,6 +132,16 @@ static inline void list_del_rcu(struct list_head *entry)
@@ -36,10 +36,10 @@ index e91ec9d..7c63916 100644
   * @n: the element to delete from the hash list.
   *
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 4e7581c..bb9bb57 100644
+index c4f72e461d28..53979dd893e0 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
-@@ -733,6 +735,58 @@ static bool assign_lock_key(struct lockdep_map *lock)
+@@ -737,6 +739,58 @@ static bool assign_lock_key(struct lockdep_map *lock)
  	return true;
  }
  
@@ -98,7 +98,7 @@ index 4e7581c..bb9bb57 100644
  /*
   * Register a lock's class in the hash-table, if the class is not present
   * yet. Otherwise we look it up. We cache the result in the lock object
-@@ -777,16 +831,22 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
+@@ -781,16 +835,22 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
  	 * Allocate a new key from the static array, and add it to
  	 * the hash:
  	 */
@@ -128,13 +128,15 @@ index 4e7581c..bb9bb57 100644
  	debug_atomic_inc(nr_unused_locks);
  	class->key = key;
  	class->name = lock->name;
-@@ -4127,24 +4191,26 @@ void lockdep_reset(void)
+@@ -4124,6 +4188,7 @@ void lockdep_reset(void)
  		INIT_HLIST_HEAD(chainhash_table + i);
  	raw_local_irq_restore(flags);
  }
 +/* EXPORT_SYMBOL_GPL(lock_reset); */
  
- static void zap_class(struct lock_class *class)
+ /*
+  * Remove all references to a lock class. The caller must hold the graph lock.
+@@ -4132,19 +4197,20 @@ static void zap_class(struct lock_class *class)
  {
  	int i;
  
@@ -152,14 +154,14 @@ index 4e7581c..bb9bb57 100644
  	 * Unhash the class and remove it from the all_lock_classes list:
  	 */
 -	hlist_del_rcu(&class->hash_entry);
--	list_del_rcu(&class->lock_entry);
+-	list_del(&class->lock_entry);
 +	hlist_del_init_rcu(&class->hash_entry);
-+	list_del_init_rcu(&class->lock_entry);
++	list_del_init(&class->lock_entry);
  
  	RCU_INIT_POINTER(class->key, NULL);
  	RCU_INIT_POINTER(class->name, NULL);
 diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
-index 88c847a..c671d55 100644
+index 88c847a41c8a..c671d55b71bf 100644
 --- a/kernel/locking/lockdep_internals.h
 +++ b/kernel/locking/lockdep_internals.h
 @@ -67,15 +67,15 @@ enum {
