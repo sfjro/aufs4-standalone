@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.17 mmap patch
 
 diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 1a76d75..77f698e 100644
+index 1a76d751cf3c..77f698eaec4e 100644
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
 @@ -2024,7 +2024,7 @@ static int map_files_get_link(struct dentry *dentry, struct path *path)
@@ -15,7 +15,7 @@ index 1a76d75..77f698e 100644
  		rc = 0;
  	}
 diff --git a/fs/proc/nommu.c b/fs/proc/nommu.c
-index 7563437..7c0dc0f 100644
+index 75634379f82e..7c0dc0ff4882 100644
 --- a/fs/proc/nommu.c
 +++ b/fs/proc/nommu.c
 @@ -45,7 +45,10 @@ static int nommu_region_show(struct seq_file *m, struct vm_region *region)
@@ -31,7 +31,7 @@ index 7563437..7c0dc0f 100644
  		ino = inode->i_ino;
  	}
 diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index c486ad4..76b71f8 100644
+index c486ad4b43f0..76b71f890851 100644
 --- a/fs/proc/task_mmu.c
 +++ b/fs/proc/task_mmu.c
 @@ -305,7 +305,10 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
@@ -56,7 +56,7 @@ index c486ad4..76b71f8 100644
  	struct mm_walk walk = {
  		.hugetlb_entry = gather_hugetlb_stats,
 diff --git a/fs/proc/task_nommu.c b/fs/proc/task_nommu.c
-index 5b62f57..dfb4a3b 100644
+index 5b62f57bd9bc..dfb4a3bd0fac 100644
 --- a/fs/proc/task_nommu.c
 +++ b/fs/proc/task_nommu.c
 @@ -156,7 +156,10 @@ static int nommu_vma_show(struct seq_file *m, struct vm_area_struct *vma,
@@ -72,7 +72,7 @@ index 5b62f57..dfb4a3b 100644
  		ino = inode->i_ino;
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 02a616e..01b3bb9 100644
+index 02a616e2f17d..01b3bb99d15b 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
 @@ -1380,6 +1380,28 @@ static inline void unmap_shared_mapping_range(struct address_space *mapping,
@@ -105,7 +105,7 @@ index 02a616e..01b3bb9 100644
  		void *buf, int len, unsigned int gup_flags);
  extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
 diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 2161234..78aa367 100644
+index 21612347d311..78aa3674a4ad 100644
 --- a/include/linux/mm_types.h
 +++ b/include/linux/mm_types.h
 @@ -251,6 +251,7 @@ struct vm_region {
@@ -125,7 +125,7 @@ index 2161234..78aa367 100644
  
  	atomic_long_t swap_readahead_info;
 diff --git a/kernel/fork.c b/kernel/fork.c
-index a5d21c4..e965e09 100644
+index a5d21c42acfc..e965e093a1c4 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -473,7 +473,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
@@ -138,7 +138,7 @@ index a5d21c4..e965e09 100644
  				atomic_dec(&inode->i_writecount);
  			i_mmap_lock_write(mapping);
 diff --git a/mm/Makefile b/mm/Makefile
-index b4e54a9a..77892ae 100644
+index b4e54a9ae9c5..77892ae8d3d1 100644
 --- a/mm/Makefile
 +++ b/mm/Makefile
 @@ -39,7 +39,7 @@ obj-y			:= filemap.o mempool.o oom_kill.o \
@@ -151,7 +151,7 @@ index b4e54a9a..77892ae 100644
  obj-y += init-mm.o
  
 diff --git a/mm/filemap.c b/mm/filemap.c
-index 0604cb0..45d2369 100644
+index 0604cb02e6f3..45d23696bc7c 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
 @@ -2700,7 +2700,7 @@ int filemap_page_mkwrite(struct vm_fault *vmf)
@@ -164,7 +164,7 @@ index 0604cb0..45d2369 100644
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index fc41c05..e376869 100644
+index fc41c0543d7f..e3768695c18c 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -180,7 +180,7 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
@@ -261,7 +261,7 @@ index fc41c05..e376869 100644
  			new_vma->vm_ops->open(new_vma);
  		vma_link(mm, new_vma, prev, rb_link, rb_parent);
 diff --git a/mm/nommu.c b/mm/nommu.c
-index 1372373..6362dde 100644
+index 13723736d38f..6362ddec0ee3 100644
 --- a/mm/nommu.c
 +++ b/mm/nommu.c
 @@ -629,7 +629,7 @@ static void __put_nommu_region(struct vm_region *region)
@@ -306,7 +306,7 @@ index 1372373..6362dde 100644
  
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
-index 0000000..a27ac36
+index 000000000000..024cdcfae1b1
 --- /dev/null
 +++ b/mm/prfile.c
 @@ -0,0 +1,86 @@
@@ -318,7 +318,7 @@ index 0000000..a27ac36
 + *
 + * See Documentation/filesystems/aufs/design/06mmap.txt
 + *
-+ * Copyright (c) 2014-2018 Junjro R. Okajima
++ * Copyright (c) 2014-2019 Junjro R. Okajima
 + * Copyright (c) 2014 Ian Campbell
 + */
 +
