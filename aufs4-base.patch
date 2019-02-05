@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.x-rcN base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 9f64f8d3740e..75e9d16582e5 100644
+index 8c68de3cfd80..c08e5dd95b5f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -2636,6 +2636,19 @@ F:	include/linux/audit.h
@@ -55,10 +55,10 @@ index cf5538942834..a271e17e4b10 100644
  
  static ssize_t loop_attr_show(struct device *dev, char *page,
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 2593153471cf..6369b30f8129 100644
+index aac41adf4743..fc18967c2522 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1224,7 +1224,7 @@ enum d_walk_ret {
+@@ -1247,7 +1247,7 @@ enum d_walk_ret {
   *
   * The @enter() callbacks are called with d_lock held.
   */
@@ -194,7 +194,7 @@ index b54e0541ad89..28607828e96f 100644
  	if (wait)
  		sync_inodes_sb(sb);
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 811c77743dad..02bc6d9dc2e9 100644
+index 29d8e2cfed0e..5db265e7d35a 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1310,6 +1310,7 @@ extern void fasync_free(struct fasync_struct *);
@@ -205,7 +205,7 @@ index 811c77743dad..02bc6d9dc2e9 100644
  extern void __f_setown(struct file *filp, struct pid *, enum pid_type, int force);
  extern int f_setown(struct file *filp, unsigned long arg, int force);
  extern void f_delown(struct file *filp);
-@@ -1802,6 +1803,7 @@ struct file_operations {
+@@ -1803,6 +1804,7 @@ struct file_operations {
  	ssize_t (*sendpage) (struct file *, struct page *, int, size_t, loff_t *, int);
  	unsigned long (*get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
  	int (*check_flags)(int);
@@ -213,7 +213,7 @@ index 811c77743dad..02bc6d9dc2e9 100644
  	int (*flock) (struct file *, int, struct file_lock *);
  	ssize_t (*splice_write)(struct pipe_inode_info *, struct file *, loff_t *, size_t, unsigned int);
  	ssize_t (*splice_read)(struct file *, loff_t *, struct pipe_inode_info *, size_t, unsigned int);
-@@ -1872,6 +1874,12 @@ ssize_t rw_copy_check_uvector(int type, const struct iovec __user * uvector,
+@@ -1873,6 +1875,12 @@ ssize_t rw_copy_check_uvector(int type, const struct iovec __user * uvector,
  			      struct iovec *fast_pointer,
  			      struct iovec **ret_pointer);
  
@@ -226,7 +226,7 @@ index 811c77743dad..02bc6d9dc2e9 100644
  extern ssize_t __vfs_read(struct file *, char __user *, size_t, loff_t *);
  extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
  extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
-@@ -2297,6 +2305,7 @@ extern int current_umask(void);
+@@ -2298,6 +2306,7 @@ extern int current_umask(void);
  extern void ihold(struct inode * inode);
  extern void iput(struct inode *);
  extern int generic_update_time(struct inode *, struct timespec64 *, int);
@@ -234,7 +234,7 @@ index 811c77743dad..02bc6d9dc2e9 100644
  
  /* /sys/fs */
  extern struct kobject *fs_kobj;
-@@ -2584,6 +2593,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
+@@ -2585,6 +2594,7 @@ static inline bool sb_is_blkdev_sb(struct super_block *sb)
  	return false;
  }
  #endif
