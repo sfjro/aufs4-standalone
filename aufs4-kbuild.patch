@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.15 kbuild patch
 
 diff --git a/fs/Kconfig b/fs/Kconfig
-index 7aee6d6..ec92031 100644
+index 7aee6d699fd6..ec92031204c5 100644
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
 @@ -248,6 +248,7 @@ source "fs/pstore/Kconfig"
@@ -14,7 +14,7 @@ index 7aee6d6..ec92031 100644
  endif # MISC_FILESYSTEMS
  
 diff --git a/fs/Makefile b/fs/Makefile
-index ef772f1..51779e68c 100644
+index ef772f1eaff8..51779e68c0d0 100644
 --- a/fs/Makefile
 +++ b/fs/Makefile
 @@ -129,3 +129,4 @@ obj-y				+= exofs/ # Multiple modules

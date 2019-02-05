@@ -1,6 +1,6 @@
 SPDX-License-Identifier: GPL-2.0
 diff --git a/fs/inode.c b/fs/inode.c
-index 03102d6..a0b03c7 100644
+index 03102d6ef044..a0b03c750f9a 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
 @@ -856,6 +856,8 @@ unsigned int get_next_ino(void)
