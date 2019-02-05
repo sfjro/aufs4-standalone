@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.18.11+ standalone patch
 
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 52cebe8..3e68f4b 100644
+index 52cebe832a6b..3e68f4b47867 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
 @@ -1343,6 +1343,7 @@ void d_walk(struct dentry *parent, void *data,
@@ -22,7 +22,7 @@ index 52cebe8..3e68f4b 100644
  /**
   * d_ancestor - search for an ancestor
 diff --git a/fs/exec.c b/fs/exec.c
-index bdd0eac..edd3405 100644
+index bdd0eacefdf5..edd34057446d 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -109,6 +109,7 @@ bool path_noexec(const struct path *path)
@@ -34,7 +34,7 @@ index bdd0eac..edd3405 100644
  #ifdef CONFIG_USELIB
  /*
 diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 545e686..0237ad7 100644
+index 545e6868d236..0237ad7a6211 100644
 --- a/fs/fcntl.c
 +++ b/fs/fcntl.c
 @@ -85,6 +85,7 @@ int setfl(int fd, struct file * filp, unsigned long arg)
@@ -46,7 +46,7 @@ index 545e686..0237ad7 100644
  static void f_modown(struct file *filp, struct pid *pid, enum pid_type type,
                       int force)
 diff --git a/fs/file_table.c b/fs/file_table.c
-index 7ec0b3e..819ee07 100644
+index 7ec0b3e5f05d..819ee0705035 100644
 --- a/fs/file_table.c
 +++ b/fs/file_table.c
 @@ -147,6 +147,7 @@ struct file *get_empty_filp(void)
@@ -82,7 +82,7 @@ index 7ec0b3e..819ee07 100644
  void __init files_init(void)
  {
 diff --git a/fs/inode.c b/fs/inode.c
-index af894e7..169811b 100644
+index af894e7be921..169811b82ba1 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
 @@ -1658,6 +1658,7 @@ int update_time(struct inode *inode, struct timespec64 *time, int flags)
@@ -94,7 +94,7 @@ index af894e7..169811b 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 7d5939b..8068b73 100644
+index 7d5939b320b9..8068b73ae6ec 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -517,6 +517,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
@@ -122,7 +122,7 @@ index 7d5939b..8068b73 100644
  static void cleanup_group_ids(struct mount *mnt, struct mount *end)
  {
 diff --git a/fs/notify/group.c b/fs/notify/group.c
-index aa5468f2..b38d224 100644
+index aa5468f23e45..b38d224133e8 100644
 --- a/fs/notify/group.c
 +++ b/fs/notify/group.c
 @@ -22,6 +22,7 @@
@@ -158,7 +158,7 @@ index aa5468f2..b38d224 100644
  int fsnotify_fasync(int fd, struct file *file, int on)
  {
 diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-index 61f4c5f..855c655 100644
+index 61f4c5fa34c7..855c65581b8f 100644
 --- a/fs/notify/mark.c
 +++ b/fs/notify/mark.c
 @@ -245,6 +245,7 @@ void fsnotify_put_mark(struct fsnotify_mark *mark)
@@ -194,7 +194,7 @@ index 61f4c5f..855c655 100644
  /*
   * Destroy all marks in destroy_list, waits for SRCU period to finish before
 diff --git a/fs/open.c b/fs/open.c
-index d0e955b..527bc1a 100644
+index d0e955b558ad..527bc1a0b557 100644
 --- a/fs/open.c
 +++ b/fs/open.c
 @@ -64,6 +64,7 @@ int do_truncate(struct dentry *dentry, loff_t length, unsigned int time_attrs,
@@ -214,7 +214,7 @@ index d0e955b..527bc1a 100644
  int open_check_o_direct(struct file *f)
  {
 diff --git a/fs/read_write.c b/fs/read_write.c
-index ccc5bc8..36f52f4 100644
+index ccc5bc8f7845..36f52f4e6e22 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -459,6 +459,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
@@ -250,7 +250,7 @@ index ccc5bc8..36f52f4 100644
  static inline loff_t file_pos_read(struct file *file)
  {
 diff --git a/fs/splice.c b/fs/splice.c
-index 1dd7f96..a5e3bcb 100644
+index 1dd7f96b22dc..a5e3bcba0ea2 100644
 --- a/fs/splice.c
 +++ b/fs/splice.c
 @@ -851,6 +851,7 @@ long do_splice_from(struct pipe_inode_info *pipe, struct file *out,
@@ -270,7 +270,7 @@ index 1dd7f96..a5e3bcb 100644
  /**
   * splice_direct_to_actor - splices data directly between two non-pipes
 diff --git a/fs/sync.c b/fs/sync.c
-index 2860782..ffd7ea4 100644
+index 28607828e96f..ffd7ea43831e 100644
 --- a/fs/sync.c
 +++ b/fs/sync.c
 @@ -39,6 +39,7 @@ int __sync_filesystem(struct super_block *sb, int wait)
@@ -282,7 +282,7 @@ index 2860782..ffd7ea4 100644
  /*
   * Write out and wait upon all dirty data associated with this
 diff --git a/fs/xattr.c b/fs/xattr.c
-index 1bee746..012c7c4 100644
+index 1bee74682513..012c7c409e65 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
 @@ -296,6 +296,7 @@ vfs_getxattr_alloc(struct dentry *dentry, const char *name, char **xattr_value,
@@ -294,7 +294,7 @@ index 1bee746..012c7c4 100644
  ssize_t
  __vfs_getxattr(struct dentry *dentry, struct inode *inode, const char *name,
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 720f070..4f58215 100644
+index 720f070cea64..4f58215d9a2c 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
 @@ -151,6 +151,7 @@ inline struct lock_class *lockdep_hlock_class(struct held_lock *hlock)
@@ -306,7 +306,7 @@ index 720f070..4f58215 100644
  
  #ifdef CONFIG_LOCK_STAT
 diff --git a/kernel/task_work.c b/kernel/task_work.c
-index 0fef395..83fb1ec 100644
+index 0fef395662a6..83fb1ecfc33d 100644
 --- a/kernel/task_work.c
 +++ b/kernel/task_work.c
 @@ -116,3 +116,4 @@ void task_work_run(void)
@@ -315,7 +315,7 @@ index 0fef395..83fb1ec 100644
  }
 +EXPORT_SYMBOL_GPL(task_work_run);
 diff --git a/security/commoncap.c b/security/commoncap.c
-index 2e489d6..1e146da 100644
+index 2e489d6a3ac8..1e146dafed62 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
 @@ -1336,12 +1336,14 @@ int cap_mmap_addr(unsigned long addr)
@@ -334,7 +334,7 @@ index 2e489d6..1e146da 100644
  #ifdef CONFIG_SECURITY
  
 diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index cd97929..424fd23 100644
+index cd97929fac66..424fd230866d 100644
 --- a/security/device_cgroup.c
 +++ b/security/device_cgroup.c
 @@ -8,6 +8,7 @@
@@ -351,7 +351,7 @@ index cd97929..424fd23 100644
  }
 +EXPORT_SYMBOL_GPL(__devcgroup_check_permission);
 diff --git a/security/security.c b/security/security.c
-index 4e572b3..a4fab20 100644
+index 4e572b38937d..a4fab20807e1 100644
 --- a/security/security.c
 +++ b/security/security.c
 @@ -539,6 +539,7 @@ int security_path_rmdir(const struct path *dir, struct dentry *dentry)
