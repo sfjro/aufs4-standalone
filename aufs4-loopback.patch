@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.14.56+ loopback patch
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 1d92600..98ce5c6 100644
+index 1d92600cfcdf..98ce5c6530cb 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
 @@ -595,6 +595,15 @@ static inline void loop_update_dio(struct loop_device *lo)
@@ -136,7 +136,7 @@ index 1d92600..98ce5c6 100644
  }
  
 diff --git a/drivers/block/loop.h b/drivers/block/loop.h
-index dfc54ce..4a0829d 100644
+index dfc54ceba410..4a0829d1ec1f 100644
 --- a/drivers/block/loop.h
 +++ b/drivers/block/loop.h
 @@ -46,7 +46,7 @@ struct loop_device {
@@ -149,7 +149,7 @@ index dfc54ce..4a0829d 100644
  	void		*key_data; 
  
 diff --git a/fs/aufs/f_op.c b/fs/aufs/f_op.c
-index 5309874..1a334cf 100644
+index 0309f0d502ff..19feb4f3cb5f 100644
 --- a/fs/aufs/f_op.c
 +++ b/fs/aufs/f_op.c
 @@ -359,7 +359,7 @@ static ssize_t aufs_read_iter(struct kiocb *kio, struct iov_iter *iov_iter)
@@ -162,7 +162,7 @@ index 5309874..1a334cf 100644
  		if (file->f_mapping != h_file->f_mapping) {
  			file->f_mapping = h_file->f_mapping;
 diff --git a/fs/aufs/loop.c b/fs/aufs/loop.c
-index 3f3577d..3b44158 100644
+index f05887d612fd..6f0505723cb4 100644
 --- a/fs/aufs/loop.c
 +++ b/fs/aufs/loop.c
 @@ -133,3 +133,19 @@ void au_loopback_fin(void)
@@ -186,7 +186,7 @@ index 3f3577d..3b44158 100644
 +	return f;
 +}
 diff --git a/fs/aufs/loop.h b/fs/aufs/loop.h
-index 05d703d..6bb23c8 100644
+index a570730f5482..255e2d3763e7 100644
 --- a/fs/aufs/loop.h
 +++ b/fs/aufs/loop.h
 @@ -26,7 +26,11 @@ void au_warn_loopback(struct super_block *h_sb);
@@ -211,7 +211,7 @@ index 05d703d..6bb23c8 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index e405c14..3d9fa3c 100644
+index 7762ac28423a..b87a55a0dce2 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
 @@ -841,7 +841,10 @@ static const struct super_operations aufs_sop = {
@@ -227,7 +227,7 @@ index e405c14..3d9fa3c 100644
  
  /* ---------------------------------------------------------------------- */
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index a71f1f4..4f1dfa9 100644
+index a71f1f43c014..4f1dfa9dd6f0 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
 @@ -1840,6 +1840,10 @@ struct super_operations {

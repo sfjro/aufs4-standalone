@@ -1,6 +1,6 @@
 SPDX-License-Identifier: GPL-2.0
 diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index ed91ce5..81877f8 100644
+index ed91ce57c428..81877f8bd640 100644
 --- a/include/linux/shmem_fs.h
 +++ b/include/linux/shmem_fs.h
 @@ -25,10 +25,13 @@ struct shmem_inode_info {
@@ -20,7 +20,7 @@ index ed91ce5..81877f8 100644
  	umode_t mode;		    /* Mount mode for root directory */
  	unsigned char huge;	    /* Whether to try for hugepages */
 diff --git a/mm/shmem.c b/mm/shmem.c
-index f383298..b06f33b 100644
+index f383298b7280..b06f33bba550 100644
 --- a/mm/shmem.c
 +++ b/mm/shmem.c
 @@ -111,9 +111,13 @@ static unsigned long shmem_default_max_blocks(void)
