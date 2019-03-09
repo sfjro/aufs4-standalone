@@ -261,7 +261,7 @@ index f7cd9cb966c0..515e88a194bd 100644
  			new_vma->vm_ops->open(new_vma);
  		vma_link(mm, new_vma, prev, rb_link, rb_parent);
 diff --git a/mm/nommu.c b/mm/nommu.c
-index e4aac33216ae..b27b200f1c4f 100644
+index e4aac33216ae..83bfcd1528a0 100644
 --- a/mm/nommu.c
 +++ b/mm/nommu.c
 @@ -625,7 +625,7 @@ static void __put_nommu_region(struct vm_region *region)
@@ -291,7 +291,7 @@ index e4aac33216ae..b27b200f1c4f 100644
  			kmem_cache_free(vm_region_jar, region);
  			region = pregion;
  			result = start;
-@@ -1361,7 +1361,7 @@ unsigned long do_mmap(struct file *file,
+@@ -1361,10 +1361,10 @@ unsigned long do_mmap(struct file *file,
  	up_write(&nommu_region_sem);
  error:
  	if (region->vm_file)
@@ -299,7 +299,11 @@ index e4aac33216ae..b27b200f1c4f 100644
 +		vmr_fput(region);
  	kmem_cache_free(vm_region_jar, region);
  	if (vma->vm_file)
- 		fput(vma->vm_file);
+-		fput(vma->vm_file);
++		vma_fput(vma);
+ 	vm_area_free(vma);
+ 	return ret;
+ 
 diff --git a/mm/prfile.c b/mm/prfile.c
 new file mode 100644
 index 000000000000..024cdcfae1b1

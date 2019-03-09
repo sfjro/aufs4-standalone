@@ -189,22 +189,19 @@ index f05887d612fd..6f0505723cb4 100644
 +	return f;
 +}
 diff --git a/fs/aufs/loop.h b/fs/aufs/loop.h
-index a570730f5482..255e2d3763e7 100644
+index c42cbe71ed4b..255e2d3763e7 100644
 --- a/fs/aufs/loop.h
 +++ b/fs/aufs/loop.h
-@@ -26,7 +26,11 @@ void au_warn_loopback(struct super_block *h_sb);
+@@ -26,6 +26,8 @@ void au_warn_loopback(struct super_block *h_sb);
  
  int au_loopback_init(void);
  void au_loopback_fin(void);
 +
 +struct file *aufs_real_loop(struct file *file);
  #else
-+AuStub(struct file *, loop_backing_file, return NULL)
-+
- AuStubInt0(au_test_loopback_overlap, struct super_block *sb,
- 	   struct dentry *h_adding)
- AuStubInt0(au_test_loopback_kthread, void)
-@@ -34,6 +38,8 @@ AuStubVoid(au_warn_loopback, struct super_block *h_sb)
+ AuStub(struct file *, loop_backing_file, return NULL)
+ 
+@@ -36,6 +38,8 @@ AuStubVoid(au_warn_loopback, struct super_block *h_sb)
  
  AuStubInt0(au_loopback_init, void)
  AuStubVoid(au_loopback_fin, void)
@@ -214,10 +211,10 @@ index a570730f5482..255e2d3763e7 100644
  
  #endif /* __KERNEL__ */
 diff --git a/fs/aufs/super.c b/fs/aufs/super.c
-index 7c270b14f8c9..61938c274f05 100644
+index 73255f63b80c..f04e211cbf89 100644
 --- a/fs/aufs/super.c
 +++ b/fs/aufs/super.c
-@@ -845,7 +845,10 @@ static const struct super_operations aufs_sop = {
+@@ -846,7 +846,10 @@ static const struct super_operations aufs_sop = {
  	.statfs		= aufs_statfs,
  	.put_super	= aufs_put_super,
  	.sync_fs	= aufs_sync_fs,
