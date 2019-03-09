@@ -74,10 +74,10 @@ index 5679e7fcb6b0..961eec3df1eb 100644
  void __init files_init(void)
  {
 diff --git a/fs/inode.c b/fs/inode.c
-index 117e6d16c3a1..63a31af2f9d8 100644
+index 4a1756b8b4bd..6e51d5f9b9f3 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1669,6 +1669,7 @@ int update_time(struct inode *inode, struct timespec64 *time, int flags)
+@@ -1666,6 +1666,7 @@ int update_time(struct inode *inode, struct timespec64 *time, int flags)
  
  	return update_time(inode, time, flags);
  }
@@ -86,7 +86,7 @@ index 117e6d16c3a1..63a31af2f9d8 100644
  /**
   *	touch_atime	-	update the access time
 diff --git a/fs/namespace.c b/fs/namespace.c
-index c3af16d31a75..f9fc947a6600 100644
+index 9b6a3d0f87a1..8c4d3d56f2df 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -434,6 +434,7 @@ void __mnt_drop_write(struct vfsmount *mnt)
