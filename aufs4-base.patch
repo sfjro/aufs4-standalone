@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.14 base patch
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2811a211632c..02b6deb1f5bc 100644
+index 2811a211632c..9b8aabc24710 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -2465,6 +2465,19 @@ F:	include/linux/audit.h
@@ -11,8 +11,8 @@ index 2811a211632c..02b6deb1f5bc 100644
  
 +AUFS (advanced multi layered unification filesystem) FILESYSTEM
 +M:	"J. R. Okajima" <hooanon05g@gmail.com>
-+L:	linux-unionfs@vger.kernel.org
 +L:	aufs-users@lists.sourceforge.net (members only)
++L:	linux-unionfs@vger.kernel.org
 +W:	http://aufs.sourceforge.net
 +T:	git://github.com/sfjro/aufs4-linux.git
 +S:	Supported
