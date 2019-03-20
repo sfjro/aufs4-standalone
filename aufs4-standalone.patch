@@ -122,18 +122,10 @@ index eb7cd21534f8..c53645816531 100644
  static void cleanup_group_ids(struct mount *mnt, struct mount *end)
  {
 diff --git a/fs/notify/group.c b/fs/notify/group.c
-index aa5468f23e45..b38d224133e8 100644
+index aa5468f23e45..9eacf2e298fd 100644
 --- a/fs/notify/group.c
 +++ b/fs/notify/group.c
-@@ -22,6 +22,7 @@
- #include <linux/srcu.h>
- #include <linux/rculist.h>
- #include <linux/wait.h>
-+#include <linux/module.h>
- 
- #include <linux/fsnotify_backend.h>
- #include "fsnotify.h"
-@@ -109,6 +110,7 @@ void fsnotify_get_group(struct fsnotify_group *group)
+@@ -109,6 +109,7 @@ void fsnotify_get_group(struct fsnotify_group *group)
  {
  	refcount_inc(&group->refcnt);
  }
@@ -141,7 +133,7 @@ index aa5468f23e45..b38d224133e8 100644
  
  /*
   * Drop a reference to a group.  Free it if it's through.
-@@ -118,6 +120,7 @@ void fsnotify_put_group(struct fsnotify_group *group)
+@@ -118,6 +119,7 @@ void fsnotify_put_group(struct fsnotify_group *group)
  	if (refcount_dec_and_test(&group->refcnt))
  		fsnotify_final_destroy_group(group);
  }
@@ -149,7 +141,7 @@ index aa5468f23e45..b38d224133e8 100644
  
  /*
   * Create a new fsnotify_group and hold a reference for the group returned.
-@@ -147,6 +150,7 @@ struct fsnotify_group *fsnotify_alloc_group(const struct fsnotify_ops *ops)
+@@ -147,6 +149,7 @@ struct fsnotify_group *fsnotify_alloc_group(const struct fsnotify_ops *ops)
  
  	return group;
  }
@@ -314,44 +306,17 @@ index 0fef395662a6..83fb1ecfc33d 100644
  	}
  }
 +EXPORT_SYMBOL_GPL(task_work_run);
-diff --git a/security/commoncap.c b/security/commoncap.c
-index f4c33abd9959..70563f11bdea 100644
---- a/security/commoncap.c
-+++ b/security/commoncap.c
-@@ -1336,12 +1336,14 @@ int cap_mmap_addr(unsigned long addr)
- 	}
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(cap_mmap_addr);
- 
- int cap_mmap_file(struct file *file, unsigned long reqprot,
- 		  unsigned long prot, unsigned long flags)
- {
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(cap_mmap_file);
- 
- #ifdef CONFIG_SECURITY
- 
 diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index cd97929fac66..424fd230866d 100644
+index cd97929fac66..20c59b2e3b26 100644
 --- a/security/device_cgroup.c
 +++ b/security/device_cgroup.c
-@@ -8,6 +8,7 @@
- #include <linux/device_cgroup.h>
- #include <linux/cgroup.h>
- #include <linux/ctype.h>
-+#include <linux/export.h>
- #include <linux/list.h>
- #include <linux/uaccess.h>
- #include <linux/seq_file.h>
-@@ -824,3 +825,4 @@ int __devcgroup_check_permission(short type, u32 major, u32 minor,
+@@ -824,3 +824,4 @@ int __devcgroup_check_permission(short type, u32 major, u32 minor,
  
  	return 0;
  }
 +EXPORT_SYMBOL_GPL(__devcgroup_check_permission);
 diff --git a/security/security.c b/security/security.c
-index 68f46d849abe..3bc13488bcfa 100644
+index 68f46d849abe..bac98d1e4dac 100644
 --- a/security/security.c
 +++ b/security/security.c
 @@ -537,6 +537,7 @@ int security_path_rmdir(const struct path *dir, struct dentry *dentry)
@@ -402,15 +367,7 @@ index 68f46d849abe..3bc13488bcfa 100644
  
  int security_path_chroot(const struct path *path)
  {
-@@ -687,6 +693,7 @@ int security_inode_readlink(struct dentry *dentry)
- 		return 0;
- 	return call_int_hook(inode_readlink, 0, dentry);
- }
-+EXPORT_SYMBOL_GPL(security_inode_readlink);
- 
- int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
- 			       bool rcu)
-@@ -702,6 +709,7 @@ int security_inode_permission(struct inode *inode, int mask)
+@@ -702,6 +708,7 @@ int security_inode_permission(struct inode *inode, int mask)
  		return 0;
  	return call_int_hook(inode_permission, 0, inode, mask);
  }
@@ -418,7 +375,7 @@ index 68f46d849abe..3bc13488bcfa 100644
  
  int security_inode_setattr(struct dentry *dentry, struct iattr *attr)
  {
-@@ -873,6 +881,7 @@ int security_file_permission(struct file *file, int mask)
+@@ -873,6 +880,7 @@ int security_file_permission(struct file *file, int mask)
  
  	return fsnotify_perm(file, mask);
  }
@@ -426,7 +383,7 @@ index 68f46d849abe..3bc13488bcfa 100644
  
  int security_file_alloc(struct file *file)
  {
-@@ -932,6 +941,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+@@ -932,6 +940,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
  		return ret;
  	return ima_file_mmap(file, prot);
  }
