@@ -186,7 +186,7 @@ index f05887d612fd..6f0505723cb4 100644
 +	return f;
 +}
 diff --git a/fs/aufs/loop.h b/fs/aufs/loop.h
-index c42cbe71ed4b..255e2d3763e7 100644
+index f31e40aff267..e13fb1a0717a 100644
 --- a/fs/aufs/loop.h
 +++ b/fs/aufs/loop.h
 @@ -26,6 +26,8 @@ void au_warn_loopback(struct super_block *h_sb);
@@ -196,7 +196,7 @@ index c42cbe71ed4b..255e2d3763e7 100644
 +
 +struct file *aufs_real_loop(struct file *file);
  #else
- AuStub(struct file *, loop_backing_file, return NULL)
+ AuStub(struct file *, loop_backing_file, return NULL, struct super_block *sb)
  
 @@ -36,6 +38,8 @@ AuStubVoid(au_warn_loopback, struct super_block *h_sb)
  
