@@ -1,0 +1,131 @@
+SPDX-License-Identifier: GPL-2.0
+diff --git a/fs/mount.h b/fs/mount.h
+index f39bc9da4d73..1ffd97696ca9 100644
+--- a/fs/mount.h
++++ b/fs/mount.h
+@@ -131,9 +131,7 @@ struct proc_mounts {
+ 	struct mnt_namespace *ns;
+ 	struct path root;
+ 	int (*show)(struct seq_file *, struct vfsmount *);
+-	void *cached_mount;
+-	u64 cached_event;
+-	loff_t cached_index;
++	bool filled;
+ };
+ 
+ extern const struct seq_operations mounts_op;
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 3ee3ee5819bc..6140871c0327 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -1324,46 +1324,78 @@ struct vfsmount *mnt_clone_internal(const struct path *path)
+ 
+ #ifdef CONFIG_PROC_FS
+ /* iterator; we want it to have access to namespace_sem, thus here... */
+-static void *m_start(struct seq_file *m, loff_t *pos)
++static int m_start_fill(struct seq_file *m)
+ {
++	int err;
++	size_t last_count;
++	char *buf;
++	struct mount *r;
+ 	struct proc_mounts *p = m->private;
+ 
++	err = -ENODATA;
+ 	down_read(&namespace_sem);
+-	if (p->cached_event == p->ns->event) {
+-		void *v = p->cached_mount;
+-		if (*pos == p->cached_index)
+-			return v;
+-		if (*pos == p->cached_index + 1) {
+-			v = seq_list_next(v, &p->ns->list, &p->cached_index);
+-			return p->cached_mount = v;
++	list_for_each_entry(r, &p->ns->list, mnt_list) {
++		last_count = m->count;
++		err = p->show(m, &r->mnt);
++		if (unlikely(err < 0))
++			break;
++		if (!seq_has_overflowed(m))
++			continue;
++
++		/* expand the buffer */
++		buf = kvmalloc(m->size + PAGE_SIZE, GFP_KERNEL);
++		if (unlikely(!buf)) {
++			err = -ENOMEM;
++			break;
++		}
++		memcpy(buf, m->buf, last_count);
++		kvfree(m->buf);
++		m->buf = buf;
++		m->size += PAGE_SIZE;
++		m->count = last_count;
++
++		err = p->show(m, &r->mnt);
++		if (unlikely(err < 0))
++			break;
++		else if (unlikely(seq_has_overflowed(m))) {
++			err = -EOVERFLOW;
++			break;
+ 		}
+ 	}
++	up_read(&namespace_sem);
+ 
+-	p->cached_event = p->ns->event;
+-	p->cached_mount = seq_list_start(&p->ns->list, *pos);
+-	p->cached_index = *pos;
+-	return p->cached_mount;
++	if (!err)
++		p->filled = true;
++	return err;
+ }
+ 
+-static void *m_next(struct seq_file *m, void *v, loff_t *pos)
++static void *m_start(struct seq_file *m, loff_t *pos)
+ {
++	int err;
+ 	struct proc_mounts *p = m->private;
+ 
+-	p->cached_mount = seq_list_next(v, &p->ns->list, pos);
+-	p->cached_index = *pos;
+-	return p->cached_mount;
++	if (!p->filled) {
++		err = m_start_fill(m);
++		if (unlikely(err))
++			return ERR_PTR(err);
++	}
++
++	return m_start; /* any valid pointer */
++}
++
++static void *m_next(struct seq_file *m, void *v, loff_t *pos)
++{
++	return NULL;
+ }
+ 
+ static void m_stop(struct seq_file *m, void *v)
+ {
+-	up_read(&namespace_sem);
++	/* empty */
+ }
+ 
+ static int m_show(struct seq_file *m, void *v)
+ {
+-	struct proc_mounts *p = m->private;
+-	struct mount *r = list_entry(v, struct mount, mnt_list);
+-	return p->show(m, &r->mnt);
++	return 0;
+ }
+ 
+ const struct seq_operations mounts_op = {
+diff --git a/fs/proc_namespace.c b/fs/proc_namespace.c
+index 7626ee11b06c..f8aee5cca1b1 100644
+--- a/fs/proc_namespace.c
++++ b/fs/proc_namespace.c
+@@ -279,7 +279,6 @@ static int mounts_open_common(struct inode *inode, struct file *file,
+ 	p->ns = ns;
+ 	p->root = root;
+ 	p->show = show;
+-	p->cached_event = ~0ULL;
+ 
+ 	return 0;
+ 
