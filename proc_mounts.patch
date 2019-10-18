@@ -1,6 +1,6 @@
 SPDX-License-Identifier: GPL-2.0
 diff --git a/fs/mount.h b/fs/mount.h
-index f39bc9da4d73..1ffd97696ca9 100644
+index f39bc9da4d73..dc6ed85500b8 100644
 --- a/fs/mount.h
 +++ b/fs/mount.h
 @@ -131,9 +131,7 @@ struct proc_mounts {
@@ -10,15 +10,15 @@ index f39bc9da4d73..1ffd97696ca9 100644
 -	void *cached_mount;
 -	u64 cached_event;
 -	loff_t cached_index;
-+	bool filled;
++	size_t filled;
  };
  
  extern const struct seq_operations mounts_op;
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 99186556f8d3..ffab4acdb729 100644
+index 99186556f8d3..b6e6c44b45eb 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -1238,46 +1238,78 @@ struct vfsmount *mnt_clone_internal(const struct path *path)
+@@ -1238,46 +1238,80 @@ struct vfsmount *mnt_clone_internal(const struct path *path)
  
  #ifdef CONFIG_PROC_FS
  /* iterator; we want it to have access to namespace_sem, thus here... */
@@ -32,6 +32,7 @@ index 99186556f8d3..ffab4acdb729 100644
  	struct proc_mounts *p = m->private;
  
 +	err = -ENODATA;
++	m->count = 0;
  	down_read(&namespace_sem);
 -	if (p->cached_event == p->ns->event) {
 -		void *v = p->cached_mount;
@@ -60,6 +61,7 @@ index 99186556f8d3..ffab4acdb729 100644
 +		m->size += PAGE_SIZE;
 +		m->count = last_count;
 +
++#if 0 /* todo: consider the limit */
 +		err = p->show(m, &r->mnt);
 +		if (unlikely(err < 0))
 +			break;
@@ -67,6 +69,7 @@ index 99186556f8d3..ffab4acdb729 100644
 +			err = -EOVERFLOW;
 +			break;
  		}
++#endif
  	}
 +	up_read(&namespace_sem);
  
@@ -75,20 +78,20 @@ index 99186556f8d3..ffab4acdb729 100644
 -	p->cached_index = *pos;
 -	return p->cached_mount;
 +	if (!err)
-+		p->filled = true;
++		p->filled = m->count;
 +	return err;
  }
  
 -static void *m_next(struct seq_file *m, void *v, loff_t *pos)
 +static void *m_start(struct seq_file *m, loff_t *pos)
  {
+-	struct proc_mounts *p = m->private;
 +	int err;
- 	struct proc_mounts *p = m->private;
  
 -	p->cached_mount = seq_list_next(v, &p->ns->list, pos);
 -	p->cached_index = *pos;
 -	return p->cached_mount;
-+	if (!p->filled) {
++	if (!*pos) {
 +		err = m_start_fill(m);
 +		if (unlikely(err))
 +			return ERR_PTR(err);
