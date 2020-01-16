@@ -33,14 +33,14 @@
 #define pr_fmt(fmt) \
 		AUFS_NAME " %s:%d:%.*s[%d]: " fmt, __func__, __LINE__, \
 		(int)sizeof(current->comm), current->comm, current->pid
+#include <linux/limits.h>
 #else
 #include <stdint.h>
 #include <sys/types.h>
+#include <limits.h>
 #endif /* __KERNEL__ */
 
-#include <linux/limits.h>
-
-#define AUFS_VERSION	"4.19.63+-20200113"
+#define AUFS_VERSION	"4.19.63+"
 
 /* todo? move this to linux-2.6.19/include/magic.h */
 #define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')
