@@ -34,10 +34,10 @@ index 433b1257694a..504c56308700 100644
  #ifdef CONFIG_USELIB
  /*
 diff --git a/fs/fcntl.c b/fs/fcntl.c
-index c91b3e3c4580..77513097f04c 100644
+index d4da10be555c..fbc70ac63462 100644
 --- a/fs/fcntl.c
 +++ b/fs/fcntl.c
-@@ -85,6 +85,7 @@ int setfl(int fd, struct file * filp, unsigned long arg)
+@@ -85,6 +85,7 @@ int setfl(int fd, struct file *filp, unsigned long arg)
   out:
  	return error;
  }
@@ -190,7 +190,7 @@ index 878478745924..ab755f585f29 100644
  long vfs_truncate(const struct path *path, loff_t length)
  {
 diff --git a/fs/read_write.c b/fs/read_write.c
-index c1335b4f19c0..6ed1f2ddcb03 100644
+index b1710ee5b642..455dd2c73d52 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
 @@ -459,6 +459,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
@@ -203,7 +203,7 @@ index c1335b4f19c0..6ed1f2ddcb03 100644
  {
 @@ -499,6 +500,7 @@ vfs_readf_t vfs_readf(struct file *file)
  		return new_sync_read;
- 	return ERR_PTR(-ENOSYS);
+ 	return ERR_PTR(-ENOSYS); /* doesn't have ->read(|_iter)() op */
  }
 +EXPORT_SYMBOL_GPL(vfs_readf);
  
@@ -211,7 +211,7 @@ index c1335b4f19c0..6ed1f2ddcb03 100644
  {
 @@ -510,6 +512,7 @@ vfs_writef_t vfs_writef(struct file *file)
  		return new_sync_write;
- 	return ERR_PTR(-ENOSYS);
+ 	return ERR_PTR(-ENOSYS); /* doesn't have ->write(|_iter)() op */
  }
 +EXPORT_SYMBOL_GPL(vfs_writef);
  
