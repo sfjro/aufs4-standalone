@@ -36,7 +36,7 @@ index e91ec9ddcd30..7c63916d235d 100644
   * @n: the element to delete from the hash list.
   *
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index c4f72e461d28..53979dd893e0 100644
+index c4f72e461d28..b4f4ba8ac9b2 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
 @@ -737,6 +739,58 @@ static bool assign_lock_key(struct lockdep_map *lock)
@@ -62,7 +62,7 @@ index c4f72e461d28..53979dd893e0 100644
 +	static unsigned long lastu;
 +
 +	/* uncomment if you want to confirm */
-+	/* 
++	/*
 +	 * DEBUG_LOCKS_WARN_ON(debug_locks
 +	 *		    && !arch_spin_is_locked(&lockdep_lock));
 +	 */
@@ -78,10 +78,10 @@ index c4f72e461d28..53979dd893e0 100644
 +	if (!class && lastu)
 +		for (u = 0; u < lastu; u++) {
 +			if (unused_lock_class_test(u)) {
-+				/* 
-+                                 * pr_debug("%s:%d: u %lu\n",
-+				 * 	 __func__, __LINE__, u);
-+                                 */
++				/*
++				 * pr_debug("%s:%d: u %lu\n",
++				 *	     __func__, __LINE__, u);
++				 */
 +				class = lock_classes + u;
 +				break;
 +			}
@@ -98,7 +98,7 @@ index c4f72e461d28..53979dd893e0 100644
  /*
   * Register a lock's class in the hash-table, if the class is not present
   * yet. Otherwise we look it up. We cache the result in the lock object
-@@ -781,16 +835,22 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
+@@ -781,16 +835,21 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
  	 * Allocate a new key from the static array, and add it to
  	 * the hash:
  	 */
@@ -111,9 +111,8 @@ index c4f72e461d28..53979dd893e0 100644
 +		if (class)
 +			class->usage_mask = 0;
 +		else {
-+			if (!debug_locks_off_graph_unlock()) {
++			if (!debug_locks_off_graph_unlock())
 +				return NULL;
-+			}
 +
 +			print_lockdep_off("BUG: MAX_LOCKDEP_KEYS too low!");
 +			dump_stack();
@@ -128,7 +127,7 @@ index c4f72e461d28..53979dd893e0 100644
  	debug_atomic_inc(nr_unused_locks);
  	class->key = key;
  	class->name = lock->name;
-@@ -4124,6 +4188,7 @@ void lockdep_reset(void)
+@@ -4124,6 +4187,7 @@ void lockdep_reset(void)
  		INIT_HLIST_HEAD(chainhash_table + i);
  	raw_local_irq_restore(flags);
  }
@@ -136,12 +135,14 @@ index c4f72e461d28..53979dd893e0 100644
  
  /*
   * Remove all references to a lock class. The caller must hold the graph lock.
-@@ -4132,19 +4197,20 @@ static void zap_class(struct lock_class *class)
- {
+@@ -4133,18 +4197,22 @@ static void zap_class(struct lock_class *class)
  	int i;
  
-+	/* pr_debug("%s:%d: %lu\n", __func__, __LINE__, class - lock_classes); */
  	/*
++	 * pr_debug("%s:%d: %lu\n",
++	 *	 __func__, __LINE__, class - lock_classes);
++	 */
++	/*
  	 * Remove all dependencies this lock is
  	 * involved in:
  	 */
