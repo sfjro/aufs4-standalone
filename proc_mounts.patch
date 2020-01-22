@@ -1,4 +1,5 @@
 SPDX-License-Identifier: GPL-2.0
+
 diff --git a/fs/mount.h b/fs/mount.h
 index f39bc9da4d73..dc6ed85500b8 100644
 --- a/fs/mount.h
