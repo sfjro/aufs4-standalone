@@ -18,10 +18,11 @@ diff --git a/include/linux/rculist.h b/include/linux/rculist.h
 index e91ec9ddcd30..7c63916d235d 100644
 --- a/include/linux/rculist.h
 +++ b/include/linux/rculist.h
-@@ -132,6 +132,16 @@ static inline void list_del_rcu(struct list_head *entry)
+@@ -131,6 +131,16 @@ static inline void list_del_rcu(struct list_head *entry)
+ 	entry->prev = LIST_POISON2;
  }
  
- /**
++/**
 + * list_del_init_rcu - deletes entry from list with re-initialization
 + * @entry: the element to delete from the list.
 +*/
@@ -31,10 +32,9 @@ index e91ec9ddcd30..7c63916d235d 100644
 +	INIT_LIST_HEAD(entry);
 +}
 +
-+/**
+ /**
   * hlist_del_init_rcu - deletes entry from hash list with re-initialization
   * @n: the element to delete from the hash list.
-  *
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
 index 4e7581c2b52f..063a721def68 100644
 --- a/kernel/locking/lockdep.c
@@ -137,11 +137,11 @@ index 4e7581c2b52f..063a721def68 100644
  {
  	int i;
  
- 	/*
++	/*
 +	 * pr_debug("%s:%d: %lu\n",
 +	 *	 __func__, __LINE__, class - lock_classes);
 +	 */
-+	/*
+ 	/*
  	 * Remove all dependencies this lock is
  	 * involved in:
  	 */
