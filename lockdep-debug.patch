@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-2.0
 aufs4.19 lockdep patch
 
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index f73ffaa0199e..0aa708fe46dd 100644
+index f73ffaa0199ee..0aa708fe46ddf 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
 @@ -17,7 +17,7 @@ struct lockdep_map;
@@ -15,7 +15,7 @@ index f73ffaa0199e..0aa708fe46dd 100644
  #include <linux/types.h>
  
 diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-index 4786c2235b98..8cc61e4b09af 100644
+index 4786c2235b981..8cc61e4b09afa 100644
 --- a/include/linux/rculist.h
 +++ b/include/linux/rculist.h
 @@ -131,6 +131,16 @@ static inline void list_del_rcu(struct list_head *entry)
@@ -36,7 +36,7 @@ index 4786c2235b98..8cc61e4b09af 100644
   * hlist_del_init_rcu - deletes entry from hash list with re-initialization
   * @n: the element to delete from the hash list.
 diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 7ac19efdac04..7f4708df74bb 100644
+index 7ac19efdac047..7f4708df74bb1 100644
 --- a/kernel/locking/lockdep.c
 +++ b/kernel/locking/lockdep.c
 @@ -733,6 +735,58 @@ static bool assign_lock_key(struct lockdep_map *lock)
@@ -161,7 +161,7 @@ index 7ac19efdac04..7f4708df74bb 100644
  	RCU_INIT_POINTER(class->key, NULL);
  	RCU_INIT_POINTER(class->name, NULL);
 diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
-index d459d624ba2a..66778b0ab21c 100644
+index d459d624ba2a7..66778b0ab21ce 100644
 --- a/kernel/locking/lockdep_internals.h
 +++ b/kernel/locking/lockdep_internals.h
 @@ -67,15 +67,15 @@ enum {
