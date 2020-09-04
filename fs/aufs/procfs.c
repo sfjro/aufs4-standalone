@@ -98,7 +98,7 @@ static ssize_t au_procfs_plm_write(struct file *file, const char __user *ubuf,
 		goto out;
 
 	err = -EINVAL;
-	if (unlikely(count > sizeof(buf)))
+	if (unlikely(count >= sizeof(buf)))
 		goto out;
 
 	err = copy_from_user(buf, ubuf, count);
