@@ -1505,6 +1505,7 @@ static int au_opt_br(struct super_block *sb, struct au_opt *opt,
 {
 	int err, do_refresh;
 
+	do_refresh = 0;
 	err = 0;
 	switch (opt->type) {
 	case Opt_append:
